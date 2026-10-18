@@ -1,0 +1,79 @@
+:root {
+  --bg: #ffffff;
+  --money: #3fb36b;
+  --money-soft: rgba(63, 179, 107, 0.35);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: var(--bg);
+  overflow: hidden;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  outline: none;
+  cursor: pointer;
+  line-height: 0;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+button img {
+  display: block;
+  width: 240px;
+  max-width: 70vw;
+  height: auto;
+  pointer-events: none;
+  filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.12));
+  transition: transform 0.25s cubic-bezier(0.3, 1.4, 0.5, 1), filter 0.25s ease;
+}
+
+button:hover img {
+  transform: translateY(-8px) rotate(-3deg) scale(1.05);
+  filter: drop-shadow(0 18px 20px rgba(0, 0, 0, 0.14)) drop-shadow(0 0 16px var(--money-soft));
+}
+
+button:active img {
+  transform: translateY(2px) rotate(0deg) scale(0.93);
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.12)) drop-shadow(0 0 10px var(--money-soft));
+  transition-duration: 0.07s;
+}
+
+button:focus-visible img {
+  filter: drop-shadow(0 0 4px var(--money)) drop-shadow(0 0 14px var(--money-soft));
+}
+
+.plus-one {
+  position: fixed;
+  z-index: 10;
+  pointer-events: none;
+  font: 700 2rem/1 system-ui, sans-serif;
+  color: var(--money);
+  text-shadow: 0 2px 8px var(--money-soft);
+  transform: translate(-50%, -50%);
+  animation: float-up 1s ease-out forwards;
+}
+
+@keyframes float-up {
+  0%   { opacity: 0; transform: translate(-50%, -30%) scale(0.6); }
+  15%  { opacity: 1; transform: translate(-50%, -80%) scale(1.15); }
+  100% { opacity: 0; transform: translate(-50%, -260%) scale(1); }
+}
+
+h1 {
+	text-align:center;
+	font-size:30px;
+	margin-top:50px;
+}
