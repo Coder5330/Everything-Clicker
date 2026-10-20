@@ -2,6 +2,7 @@
   {
     "upgrade": "basic capitalism",
     "cost": 25,
-    "clickPerSec": 1
+    "ClickIncrease": 0,
+    "PerSecIncrease": 1
   }
 }
