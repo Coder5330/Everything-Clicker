@@ -90,10 +90,12 @@ h1 {
 }
 
 #layer1Left {
-    flex: 1;                       
+    flex: 1;
+	text-align: center;
 }
 
 #layer1Right {
-    flex: 1;                      
+    flex: 1;           
+	text-align: center;
 }
 
