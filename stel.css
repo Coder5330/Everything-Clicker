@@ -97,5 +97,6 @@ h1 {
 #layer1Right {
     flex: 1;           
 	text-align: center;
+	background-color: rgba(150,150,150,0.7)
 }
 
