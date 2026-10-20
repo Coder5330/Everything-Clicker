@@ -9,7 +9,7 @@ function increase(event) {
 
 async function loadJSON() {
   try {
-    const response = await fetch('./example.json');
+    const response = await fetch('./upgrades.json');
     const data = await response.json();
     console.log(data);
   } catch (error) {
