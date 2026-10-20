@@ -7,15 +7,16 @@ function increase(event) {
 	txt1.textContent = "$"+count;
 }
 
-async function loadJSON() {
+async function loadUPG() {
   try {
     const response = await fetch('./upgrades.json');
     const data = await response.json();
     console.log(data);
+	return data;
   } catch (error) {
     console.error('Error loading JSON:', error);
   }
 }
 
-loadJSON();
+loadUPG();
 btn.addEventListener("click", increase);
