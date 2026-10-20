@@ -77,3 +77,25 @@ h1 {
 	font-size:30px;
 	margin-top:50px;
 }
+
+/* Container that forces the items to stay side-by-side */
+.game-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;        
+    width: 100%;
+    min-height: 100vh;              
+    box-sizing: border-box;
+    padding: 20px;                  
+}
+
+#layer1Left {
+    flex: 1;                       
+    text-align: left;               
+}
+
+#layer1Right {
+    flex: 1;                      
+    text-align: right;             
+}
+
