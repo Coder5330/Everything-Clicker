@@ -78,7 +78,7 @@ function autoinc() {
 }
 
 function render() {
-	txt1.textContent = count;
+	txt1.textContent = "$"+ count;
 	txt2.textContent = inc;
 	txt3.textContent = autoadd;
 }
@@ -105,7 +105,7 @@ function makeUpgradeButtons() {
 		info.className = "upgrade-name";
 
 		const newBtn = document.createElement("button");
-		newBtn.textContent = "Price:" + data[i]["cost"];
+		newBtn.textContent = "Cost:$" + data[i]["cost"];
 		newBtn.title = data[i]["description"];
 		newBtn.className = "upgrade-btn";
 		newBtn.onclick = () => Upgrade(i);
