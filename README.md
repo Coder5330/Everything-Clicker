@@ -16,10 +16,10 @@ ONLY USE AI FOR CSS
 
 - Update pre-pre-pre alpha 0.0.6: Added patch for upgrades
 
-- Update pre-pre-pre alpha 0.0.7: added another upgrade *(current version)*
+- Update pre-pre-pre alpha 0.0.7: Added another upgrade
 
-**Deployment will be paused until reaching alpha 1.0.0**
+**- Update pre-pre-pre alpha 0.0.8: Implemented a buy limit(current version)**
 
 Our version control is fked up so don't expect consistent version numbers
 
-NOTE TO CONTRIBUTORS: CREATE YOUR OWN BRANCHES AND SEND PULL REQUESTS PLS
+**NOTE TO CONTRIBUTORS: CREATE YOUR OWN BRANCHES AND SEND PULL REQUESTS PLS**
