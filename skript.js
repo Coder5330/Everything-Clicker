@@ -2,11 +2,11 @@ let count = 0;
 const btn = document.querySelector("button");
 const txt1 = document.getElementById("count");
 const upgrades = document.getElementById("layer1Right");
-let increase = 1;
+let inc = 1;
 let auto = 0;
 
 function increase(event) {
-	count += increase;
+	count += inc;
 	txt1.textContent = "$"+count;
 }
 
