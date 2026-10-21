@@ -32,7 +32,7 @@
   {
 	  "upgrade":"Housing Development Board",
 	  "cost":50000,
-	  "clickIncrease":5,
+	  "ClickIncrease":5,
 	  "PerSecIncrease":5,
 	  "description":"Giving your Work-I mean residents housing increases their productivity and your own morale.",
 	  "buycap":75,
