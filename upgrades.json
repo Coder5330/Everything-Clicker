@@ -10,24 +10,24 @@
     "buylimitmsg":"You are now in the top 0.01% of richness, basic plans no longer interests you.(buy limit reached)"
   },
   {
-    "upgrade": "Residence",
+    "upgrade": "Willing Slave-I mean residents",
     "cost": 50,
     "ClickIncrease": 0,
     "PerSecIncrease": 1,
-    "description":"Your residents support your vision by working hard.",
+    "description":"Hey, if it works it works man. They signed the Terms and Conditons for free housing.",
     "buycap":100,
     "purchased":0,
     "buylimitmsg":"you ran out of space in your capitalist state.(buy limit reached)"
   },
   {
-	  "upgrade":"Stakes in other companies",
+	  "upgrade":"Long Term Investments",
 	  "cost":1000,
 	  "ClickIncrease":0,
 	  "PerSecIncrease":3,
 	  "description":"Who knew stocks made passive income?",
 	  "buycap":300,
 	  "purchased":0,
-	  "buylimitmsg":"All companies rely on your shares to obtain funding.(buy limit reach)"
+	  "buylimitmsg":"All companies rely on your shares to obtain funding.(buy limit reached)"
   },
   {
 	  "upgrade":"Housing Development Board",
