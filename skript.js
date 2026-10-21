@@ -10,9 +10,9 @@ let data = []
 
 
 function render() {
-	txt1.textContent = "$" + count;
-	txt2.textContent = "$" + inc;
-	txt3.textContent = "$" + autoadd;
+	txt1.textContent = count;
+	txt2.textContent = inc;
+	txt3.textContent = autoadd;
 }
 
 function increase(event) {
