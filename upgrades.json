@@ -1,8 +1,15 @@
 [
-  {
-    "upgrade": "basic capitalism",
-    "cost": 25,
-    "ClickIncrease": 0,
-    "PerSecIncrease": 1
-  }
+	{
+    		"upgrade": "basic capitalism",
+    		"cost": 25,
+    		"ClickIncrease": 0,
+    		"PerSecIncrease": 1
+  	},
+	{
+		"upgrade":"A group of residents",
+		"cost":50,
+		"ClickIncrease":1,
+		"PerSecIncrease":0
+	}
+
 ]
