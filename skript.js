@@ -4,6 +4,7 @@ const txt1 = document.getElementById("count");
 const txt2 = document.getElementById("click-str");
 const txt3 = document.getElementById("auto-str");
 const upgrades = document.getElementById("layer1Right");
+const upgradesContainer = document.getElementById("upgrade-area");
 let inc = 1;
 let autoadd = 0;
 let data = []
@@ -27,16 +28,29 @@ function autoinc(){
 
 async function loadUPGandMake() {
   try {
-    const response = await fetch('./upgrades.json');
-    const d = await response.json();
-    console.log(d);
-	data = d;
+	  const response = await fetch('./upgrades.json');
+	  const d = await response.json();
+	  console.log(d);
+	  data = d;
+	  upgradesContainer.innerHTML= '';
+
 	for (let i = 0; i<d.length; i++){
+		const upgradeBox = document.createElement("div");
+		upgradeBox.className = "upgrades";
+		
+		const info = document.createElement("span");
+		info.textContent = d[i]["upgrade"]
+		info.className="upgrade-name"
+		
 		const newBtn = document.createElement("button");
-		newBtn.textContent = d[i]["upgrade"]+" Costs: "+d[i]["cost"];
-		newBtn.className = "upgrade-btn";
+		newBtn.textContent = "Price:" + d[i]["cost"];
+		newBtn.className = "upgrade-btn"
 		newBtn.onclick = () => Upgrade(i);
-		upgrades.appendChild(newBtn);
+
+		upgradeBox.appendChild(info);
+		upgradeBox.appendChild(newBtn);
+
+		upgradesContainer.appendChild(upgradeBox);
 	}
   } catch (error) {
     console.error('Error loading JSON:', error);
@@ -53,6 +67,6 @@ function Upgrade(i){
 		alert("You don't have enough money");
 	}
 }
-data = loadUPGandMake();
+loadUPGandMake()
 btn.addEventListener("click", increase);
 const intervalId = setInterval(autoinc, 1000);
