@@ -1,43 +1,63 @@
 [
   {
-    "upgrade": "Basic capitalisation",
-    "cost": 10,
-    "ClickIncrease": 1,
-    "PerSecIncrease": 0,
-    "description":"The first step to owning everything.",
-    "buycap":50,
-    "purchased":0,
-    "buylimitmsg":"You are now in the top 0.01% of richness, basic plans no longer interests you.(buy limit reached)"
+    	"upgrade": "Basic capitalisation",
+    	"cost": 10,
+    	"ClickIncrease": 1,
+	"PerSecIncrease": 0,
+    	"description":"The first step to owning everything.",
+    	"buycap":50,
+    	"purchased":0,
+    	"buylimitmsg":"You are now in the top 0.01% of richness, basic plans no longer interests you.(buy limit reached)"
   },
   {
-    "upgrade": "Willing Slave-I mean residents",
-    "cost": 50,
-    "ClickIncrease": 0,
-    "PerSecIncrease": 1,
-    "description":"Hey, if it works it works man. They signed the Terms and Conditons for free housing.",
-    "buycap":100,
-    "purchased":0,
-    "buylimitmsg":"you ran out of space in your capitalist state.(buy limit reached)"
+    	"upgrade": "Willing Slave-I mean residents",
+    	"cost": 50,
+    	"ClickIncrease": 0,
+    	"PerSecIncrease": 1,
+    	"description":"Hey, if it works it works man. They signed the Terms and Conditons for free housing.",
+    	"buycap":100,
+    	"purchased":0,
+    	"buylimitmsg":"you ran out of space in your capitalist state.(buy limit reached)"
   },
   {
-	  "upgrade":"Long Term Investments",
-	  "cost":1000,
-	  "ClickIncrease":0,
-	  "PerSecIncrease":3,
-	  "description":"Who knew stocks made passive income?",
-	  "buycap":300,
-	  "purchased":0,
-	  "buylimitmsg":"All companies rely on your shares to obtain funding.(buy limit reached)"
+	 "upgrade":"Long Term Investments",
+	 "cost":1000,
+	 "ClickIncrease":0,
+	 "PerSecIncrease":3,
+	 "description":"Who knew stocks made passive income?",
+	 "buycap":300,
+	 "purchased":0,
+	 "buylimitmsg":"All companies rely on your shares to obtain funding.(buy limit reached)"
   },
   {
-	  "upgrade":"Housing Development Board",
-	  "cost":50000,
-	  "ClickIncrease":5,
-	  "PerSecIncrease":5,
-	  "description":"Giving your Work-I mean residents housing increases their productivity and your own morale.",
-	  "buycap":75,
-	  "purchased":0,
-	  "buylimitmsg":"Your buildings have been stacked so high their reaching their clouds.(buy limit reached)"
+	 "upgrade":"Housing Development Board",
+	 "cost":10000,
+	 "ClickIncrease":5,
+	 "PerSecIncrease":5,
+	 "description":"Giving your Work-I mean residents housing increases their productivity and your own morale.",
+	 "buycap":75,
+	 "purchased":0,
+	 "buylimitmsg":"Your buildings have been stacked so high their reaching their clouds.(buy limit reached)"
+  },
+  {
+	 "upgrade":"Commercial Seafare",
+	 "cost":50000,
+	 "ClickIncrease":0,
+	 "PerSecIncrease":30,
+	 "description":"Which billionare doesn't like private sea carriage?",
+	 "buycap":100,
+	 "purchased":0,
+	 "buylimitmsg":"All sea shipments now require your boats.(buy limit reached)"
+  },
+  {
+	 "upgrade":"Land Expansion",
+	 "cost":10000,
+	 "ClickIncrease":0,
+	 "PerSecIncrease":10,
+	 "description":"More land for your empire.",
+	 "buycap":75,
+	 "purchased":0,
+	 "buylimitmsg":"You are quickly running out of space to reclaim,and can no longer expand your country.(buy limit reached)"
   }
 ]
 
