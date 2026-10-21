@@ -20,7 +20,9 @@ ONLY USE AI FOR CSS
 
 - Update pre-pre-pre alpha 0.0.8: Added a buy limit
 
-- **Update pre-pre-pre alpha 0.0.9: Major update, implemented storage caching and optimised code, hopefully game should be faster (CURRENT VERSION)**
+- Update pre-pre-pre alpha 0.0.9: Major update, implemented storage caching and optimised code, hopefully game should be faster
+
+- **Update pre-pre-pre alpha 0.1.0: Added more upgrades yay (Current Version)**
 
 Most recent update was bug fixing cus I'm a bad programmer and I fked something up
 
