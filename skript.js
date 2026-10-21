@@ -3,15 +3,15 @@ const btn = document.querySelector("button");
 const txt1 = document.getElementById("count");
 const upgrades = document.getElementById("layer1Right");
 let inc = 1;
-let auto = 0;
+let autoadd = 0;
 
 function increase(event) {
 	count += inc;
 	txt1.textContent = "$"+count;
 }
 
-function auto(){
-	count += auto;
+function autoinc(){
+	count += autoadd;
 }
 
 async function loadUPG() {
@@ -47,4 +47,4 @@ function MakeUpgBtn(d){
 data = loadUPG();
 MakeUpgBtn(data);
 btn.addEventListener("click", increase);
-const intervalId = setInterval(auto, 1000);
+const intervalId = setInterval(autoinc, 1000);
