@@ -1,6 +1,8 @@
 let count = 0;
 const btn = document.getElementById("click-btn");
 const txt1 = document.getElementById("count");
+const txt2 = document.getElementById("click-str");
+const txt3 = document.getElementById("auto-str");
 const upgrades = document.getElementById("layer1Right");
 let inc = 1;
 let autoadd = 0;
@@ -9,6 +11,8 @@ let data = []
 
 function render() {
 	txt1.textContent = "$" + count;
+	txt2.textContent = "$" + inc;
+	txt3.textContent = "$" + autoadd;
 }
 
 function increase(event) {
