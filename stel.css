@@ -74,6 +74,11 @@ button:active img {
   transition-duration: 0.07s;
 }
 
+#click-btn {
+  width: min(100%, 450px, 40vh);
+  aspect-ratio: 1 / 1;
+}
+
 button:focus-visible img {
   filter: drop-shadow(0 0 4px var(--money)) drop-shadow(0 0 14px var(--money-soft));
 }
