@@ -40,7 +40,7 @@ function Upgrade(i){
 	if (count >= data[i]["cost"]){
 		count -= data[i]["cost"];
 		inc += data[i]["ClickIncrease"]||0;
-		auto += data[i]["PerSecIncrease"]||0;
+		autoadd += data[i]["PerSecIncrease"]||0;
 		render()
 	} else {
 		alert("You don't have enough money");
