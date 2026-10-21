@@ -44,7 +44,8 @@ async function loadUPGandMake() {
 		
 		const newBtn = document.createElement("button");
 		newBtn.textContent = "Price:" + d[i]["cost"];
-		newBtn.className = "upgrade-btn"
+		newBtn.title = d[i]["description"];
+		newBtn.className = "upgrade-btn";
 		newBtn.onclick = () => Upgrade(i);
 
 		upgradeBox.appendChild(info);
@@ -58,13 +59,19 @@ async function loadUPGandMake() {
 }
 
 function Upgrade(i){
-	if (count >= data[i]["cost"]){
+	if (count >= data[i]["cost"] && data[i]["purchased"] < data[i]["buycap"]){
+
 		count -= data[i]["cost"];
 		inc += data[i]["ClickIncrease"]||0;
 		autoadd += data[i]["PerSecIncrease"]||0;
-		render()
-	} else {
+		data[i]["purchased"]++;
+		render();
+	} 
+	else if (count < data[i]["cost"]){
 		alert("You don't have enough money");
+	}
+	else {
+		alert(data[i]["buylimitmsg"])
 	}
 }
 loadUPGandMake()
