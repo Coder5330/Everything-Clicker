@@ -24,7 +24,9 @@ ONLY USE AI FOR CSS
 
 - Update pre-pre-pre alpha 0.1.0: Added more upgrades yay
 
-- **Update pre-pre-pre alpha 0.1.1: Added even more upgrades(current version)**
+- Update pre-pre-pre alpha 0.1.1: Added even more upgrades(current version)
+
+- **Update pre-pre-pre alpha 0.1.2: made some styling changes so that all text is visible. Also added dollar sign.**
 
 
 
