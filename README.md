@@ -22,6 +22,8 @@ ONLY USE AI FOR CSS
 
 - **Update pre-pre-pre alpha 0.0.9: Major update, implemented storage caching and optimised code, hopefully game should be faster (CURRENT VERSION)**
 
+Most recent update was bug fixing cus I'm a bad programmer and I fked something up
+
 Our version control is fked up so don't expect consistent version numbers
 
 **NOTE TO CONTRIBUTORS: CREATE YOUR OWN BRANCHES AND SEND PULL REQUESTS PLS**
