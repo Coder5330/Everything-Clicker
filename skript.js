@@ -29,7 +29,7 @@ async function loadUPGandMake() {
 	data = d;
 	for (let i = 0; i<d.length; i++){
 		const newBtn = document.createElement("button");
-		newBtn.textContent = d[i]["upgrade"];
+		newBtn.textContent = d[i]["upgrade"]+" Costs: "+d[i]["cost"];
 		newBtn.className = "upgrade-btn";
 		newBtn.onclick = () => Upgrade(i);
 		upgrades.appendChild(newBtn);
