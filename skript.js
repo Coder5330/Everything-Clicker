@@ -4,6 +4,8 @@ const txt1 = document.getElementById("count");
 const upgrades = document.getElementById("layer1Right");
 let inc = 1;
 let autoadd = 0;
+let data = []
+
 
 function render() {
 	txt1.textContent = "$" + count;
@@ -24,6 +26,7 @@ async function loadUPGandMake() {
     const response = await fetch('./upgrades.json');
     const d = await response.json();
     console.log(d);
+	data = d;
 	for (let i = 0; i<d.length; i++){
 		const newBtn = document.createElement("button");
 		newBtn.textContent = d[i]["upgrade"];
