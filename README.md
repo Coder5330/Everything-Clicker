@@ -10,6 +10,8 @@ ONLY USE AI FOR CSS
 
 - Update pre-pre-pre alpha 0.0.3: added upgrade data in json file and loading said json file
 
+- Update pre-pre-pre alpha 0.0.4:Updated CSS of upgrade area to look better
+
 **Deployment will be paused until reaching alpha 1.0.0**
 
 Our version control is fked up so don't expect consistent version numbers
