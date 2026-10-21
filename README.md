@@ -14,6 +14,10 @@ ONLY USE AI FOR CSS
 
 - Update pre-pre-pre alpha 0.0.5: added upgrade button making HOPEFULLY and upgrades.
 
+- Update pre-pre-pre alpha 0.0.6: Added patch for upgrades
+
+- Update pre-pre-pre alpha 0.0.7: added another upgrade *(current version)*
+
 **Deployment will be paused until reaching alpha 1.0.0**
 
 Our version control is fked up so don't expect consistent version numbers
