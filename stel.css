@@ -73,30 +73,67 @@ button:focus-visible img {
 }
 
 h1 {
-	text-align:center;
-	font-size:30px;
-	margin-top:50px;
+  text-align: center;
+  font-size: 30px;
+  margin-top: 50px;
 }
 
-/* Container that forces the items to stay side-by-side */
 .game-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;        
-    width: 100%;
-    min-height: 100vh;              
-    box-sizing: border-box;
-    padding: 20px;                  
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  width: 100%;
+  height: 100vh;
+  padding: 20px;
+  overflow: hidden;
 }
 
 #layer1Left {
-    flex: 1;
-	text-align: center;
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  overflow: hidden;
+  padding: 1rem;
+  text-align: center;
+}
+
+#click-btn {
+  width: min(100%, 450px);
+  aspect-ratio: 1 / 1;
+}
+
+#click-btn img {
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  object-fit: contain;
+  user-select: none;
 }
 
 #layer1Right {
-    flex: 1;           
-	text-align: center;
-	background-color: rgba(150,150,150,0.7)
+  flex: 0 0 320px;
+  text-align: center;
+  background-color: rgba(150, 150, 150, 0.7);
+  border-left: 3px solid #f5c542;
+  overflow-y: auto;
+  padding: 0 1rem 1rem;
 }
 
+#layer1Right h2 {
+  position: sticky;
+  top: 0;
+  margin: 0 -1rem 1rem;
+  padding: 1rem;
+  text-align: center;
+  font-size: 1.8rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #f5c542;
+  background: linear-gradient(180deg, #2b2b3d, #1e1e2a);
+  border-bottom: 3px solid #f5c542;
+  text-shadow: 0 2px 0 #000, 0 0 12px rgba(245, 197, 66, 0.5);
+}
