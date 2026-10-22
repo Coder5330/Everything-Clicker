@@ -49,7 +49,11 @@ function pulseGlow() {
 	    if (intensity <= 30) growing = true;
 	}
 	  
-	glowContainer.style.boxShadow = `inset 0 0 ${intensity * 2}px rgba(255, 200, 40, 0.5), 0 0 ${intensity * 3}px rgba(255, 200, 40, 0.4)`;
+	glowContainer.style.boxShadow = `
+		inset 0 0 ${intensity * 2}px rgba(255, 225, 60, 0.75),
+		inset 0 0 ${intensity * 4}px rgba(255, 190, 0, 0.35),
+		0 0 ${intensity * 3}px rgba(255, 215, 0, 0.6)
+	`;
 	  
 	requestAnimationFrame(pulseGlow);
 }
