@@ -13,7 +13,7 @@ const PARALLELOGRAM_SIZE = 80;
 const PARALLELOGRAM_LIFETIME = 8000;
 
 const formatter = new Intl.NumberFormat('en-US', {
-	notation: 'compact',
+	notation: 'scientific',
 	compactDisplay: 'short'
 });
 
