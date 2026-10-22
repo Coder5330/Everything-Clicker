@@ -93,6 +93,15 @@ function sign(countVal, purchasedJSON, rebirthFlag) {
 
 function purchasedMap() {
 	const map = {};
+	const sorted = data.slice().sort((a, b) => (a.upgrade < b.upgrade ? -1 : 1));
+	for (const item of sorted) {
+		if (item.purchased) map[item.upgrade] = item.purchased;
+	}
+	return map;
+}
+
+function legacyPurchasedMap() {
+	const map = {};
 	for (const item of data) map[item.upgrade] = item.purchased || 0;
 	return map;
 }
@@ -475,7 +484,7 @@ function update() {
 }
 
 function gameLoop(now) {
-	const dt = (now - lastFrame) / 1000;
+	const dt = Math.max(0, (now - lastFrame) / 1000);
 	lastFrame = now;
 
 	checkIntegrity();
@@ -577,7 +586,9 @@ async function runGame() {
 	const hasSave = localStorage.getItem('gameCount') !== null;
 	const tampered =
 		localStorage.getItem("cheater") === "1" ||
-		(hasSave && sig && sig !== sign(count, JSON.stringify(purchasedMap()), rebirthed));
+		(hasSave && sig &&
+			sig !== sign(count, JSON.stringify(purchasedMap()), rebirthed) &&
+			sig !== sign(count, JSON.stringify(legacyPurchasedMap()), rebirthed));
 
 	localStorage.removeItem('gamedata');
 	localStorage.removeItem('gameDataHasCached');
