@@ -3,6 +3,7 @@ const countText = document.getElementById("count");
 const clickText = document.getElementById("click-str");
 const autoText = document.getElementById("auto-str");
 const upgradesContainer = document.getElementById("upgrade-area");
+const glowContainer = document.getElementById('screen-glow');
 
 const BOOST_MULTIPLIER = 7;
 const BOOST_DURATION = 60;
@@ -11,6 +12,9 @@ const SPAWN_MAX = 90;
 const PARALLELOGRAM_SIZE = 80;
 const PARALLELOGRAM_LIFETIME = 8000;
 
+
+let intensity = 40;
+let growing = true;
 let count = 0;
 let inc = 1;
 let autoadd = 0;
@@ -34,6 +38,21 @@ function getBoostMultiplier() {
 
 function currentCost(item) {
 	return Math.floor(item.cost * Math.pow(item.multiplier || 1, item.purchased));
+}
+
+
+function pulseGlow() {
+  if (growing) {
+    intensity += 1;
+    if (intensity >= 80) growing = false;
+  } else {
+    intensity -= 1;
+    if (intensity <= 30) growing = true;
+  }
+  
+  glowContainer.style.boxShadow = `inset 0 0 ${intensity * 2}px rgba(0, 255, 204, 0.5), 0 0 ${intensity * 3}px rgba(0, 255, 204, 0.4)`;
+  
+  requestAnimationFrame(pulseGlow);
 }
 
 async function loadGameData() {
@@ -250,3 +269,4 @@ async function runGame() {
 btn.addEventListener("click", () => addMoney(inc));
 setInterval(update, 1000);
 runGame();
+pulseGlow();
