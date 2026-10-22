@@ -511,6 +511,17 @@ function rebirth_logic(event) {
 	}
 }
 
+function cheat() {
+	for (const item of data) {
+		item.purchased = item.buycap;
+	}
+	count = 1e100;
+
+	saveProgress();
+	recalcStats();
+	render();
+}
+
 window.addEventListener("resize", resizeRain);
 resizeRain();
 
