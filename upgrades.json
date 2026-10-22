@@ -97,5 +97,16 @@
 		 "purchased":0,
 		  "multiplier": 1.2,
 		 "buylimitmsg":"You already bought this upgrade"
-	}
+	},
+	{
+		 "upgrade":"Learn to code",
+		 "cost":5000000000,
+		 "ClickIncrease":0,
+		 "PerSecIncrease":0,
+		 "description": "Allows you to open a coding box and code money giving software",
+		 "buycap":1,
+		 "purchased":0,
+		  "multiplier": 1.2,
+		 "buylimitmsg":"You already bought this upgrade"
+	},
 ]
