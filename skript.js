@@ -184,7 +184,7 @@ function refreshUpgradeButtons() {
 			disabled = true;
 		} else {
 			const price = currentCost(item);
-			text = "Cost:$" + formatter.format(price)
+			text = "$" + formatter.format(price)
 				+ " (" + item.purchased + "/" + item.buycap + ")";
 			disabled = count < price;
 		}
