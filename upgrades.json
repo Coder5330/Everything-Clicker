@@ -7,7 +7,7 @@
     	"description":"The first step to owning everything.",
     	"buycap":50,
     	"purchased":0,
-	  	"multiplier": 1.2,
+	  	"multiplier": 1.15,
     	"buylimitmsg":"You are now in the top 0.01% of richness, basic plans no longer interests you.(buy limit reached)"
 	},
 	{
@@ -18,7 +18,7 @@
     	"description":"Hey, if it works it works man. They signed the Terms and Conditons for free housing.",
     	"buycap":100,
     	"purchased":0,
-	  	"multiplier": 1.2,
+	  	"multiplier": 1.15,
     	"buylimitmsg":"you ran out of space in your capitalist state.(buy limit reached)"
   	},
   	{
@@ -29,7 +29,7 @@
 		 "description":"Who knew stocks made passive income?",
 		 "buycap":300,
 		 "purchased":0,
-		 "multiplier": 1.2,
+		 "multiplier": 1.15,
 		 "buylimitmsg":"All companies rely on your shares to obtain funding.(buy limit reached)"
   	},
   	{
@@ -40,7 +40,7 @@
 		 "description":"Giving your Work-I mean residents housing increases their productivity and your own morale.",
 		 "buycap":75,
 		 "purchased":0,
-		 "multiplier": 1.2,
+		 "multiplier": 1.15,
 		 "buylimitmsg":"Your buildings have been stacked so high their reaching their clouds.(buy limit reached)"
   	},
   	{
@@ -51,7 +51,7 @@
 		 "description":"More land for your empire.",
 		 "buycap":75,
 		 "purchased":0,
-		 "multiplier": 1.2,
+		 "multiplier": 1.15,
 		 "buylimitmsg":"You are quickly running out of space to reclaim,and can no longer expand your country.(buy limit reached)"
   	},
   	{
@@ -62,7 +62,7 @@
 		 "description":"Which billionare doesn't like private sea carriage?",
 		 "buycap":100,
 		 "purchased":0,
-		  "multiplier": 1.2,
+		  "multiplier": 1.15,
 		 "buylimitmsg":"All sea shipments now require your boats.(buy limit reached)"
   	},
   	{
@@ -73,7 +73,7 @@
 		 "description": "Deploy state-of-the-art algorithmic scripts to optimize your rigs.",
 		 "buycap":50,
 		 "purchased":0,
-		  "multiplier": 1.2,
+		  "multiplier": 1.15,
 		 "buylimitmsg":"You ran out of RAM. (buy limit reached)"
 	},
 	{
@@ -84,7 +84,7 @@
 		 "description": "Hack this game to earn money",
 		 "buycap":50,
 		 "purchased":0,
-		  "multiplier": 1.2,
+		  "multiplier": 1.15,
 		 "buylimitmsg":"You got caught hacking. (buy limit reached)"
 	},
 	{
@@ -95,7 +95,7 @@
 		 "description": "Parallelograms spawn randomly and you get extra money from clicking them",
 		 "buycap":1,
 		 "purchased":0,
-		  "multiplier": 1.2,
+		  "multiplier": 1.15,
 		 "buylimitmsg":"You already bought this upgrade"
 	},
 	{
@@ -106,7 +106,7 @@
 		 "description": "Allows you to open a coding box and code money giving software",
 		 "buycap":1,
 		 "purchased":0,
-		  "multiplier": 1.2,
+		  "multiplier": 1.15,
 		 "buylimitmsg":"You already bought this upgrade"
 	}
 ]
