@@ -7,6 +7,12 @@ const upgradesContainer = document.getElementById("upgrade-area");
 let inc = 1;
 let autoadd = 0;
 let data = [];
+let time = 0;
+let timer = Math
+let parallelograms = [];
+let parallelogramsOn = false;
+const parallelogramImage = new Image();
+parallelogramImage.src = "parallelogram.png";
 
 async function loadgamedata() {
 	try {
@@ -16,6 +22,10 @@ async function loadgamedata() {
 	catch (error) {
 		console.error("Error loading file:", error);
 	}
+}
+
+function randint(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 function saveProgress() {
@@ -75,6 +85,9 @@ function autoinc() {
 	count += autoadd;
 	localStorage.setItem('gameCount', count);
 	render();
+	if (parallelogramsOn) {
+		if (
+	}
 }
 
 function render() {
