@@ -9,8 +9,8 @@ const glowContainer = document.getElementById('screen-glow');
 
 const BOOST_MULTIPLIER = 7;
 const BOOST_DURATION = 60;
-const SPAWN_MIN = 30;
-const SPAWN_MAX = 90;
+const SPAWN_MIN = 300;
+const SPAWN_MAX = 900;
 const PARALLELOGRAM_SIZE = 80;
 const PARALLELOGRAM_LIFETIME = 8000;
 const RAIN_FONT_SIZE = 16;
