@@ -32,7 +32,9 @@ ONLY USE AI FOR CSS
 
 - Update pre-pre alpha 0.1.6: added 'thousand' system that makes numbers shorter.
 
-- **Update pre-pre alpha 0.1.7: added rebirth system that does not actually rebirth yet.**
+- Update pre-pre alpha 0.1.7: added rebirth system that does not actually rebirth yet.
+
+- Update pre-pre alpha 0.1.8: added rough layout of minigame 1 
 
 
 
