@@ -1,3 +1,9 @@
+const rebirthed = localStorage.getItem("rebirthed") === "1";
+
+if (!rebirthed) {
+    location.href = "./index.html";
+} 
+
 const input = document.getElementById("cmd");
 const output = document.getElementById("output");
 const bash = document.getElementById("bash");
