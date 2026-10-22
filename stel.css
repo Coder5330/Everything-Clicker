@@ -15,6 +15,7 @@ body {
   overflow: hidden;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
+  overflow: hidden;
 }
 
 button {
@@ -164,4 +165,21 @@ h1 {
   color: var(--money);
   background: linear-gradient(180deg, #ffffff, #f7faf8);
   border-bottom: 3px solid var(--money);
+}
+
+#screen-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none; /* Allows clicks to pass through to elements underneath */
+  z-index: 9999;
+  
+  /* Initial subtle glow around the edges */
+  box-shadow: inset 0 0 100px rgba(0, 255, 204, 0.4), 
+              0 0 100px rgba(0, 255, 204, 0.4);
+  
+  /* Transition smoothly when JS modifies it */
+  transition: box-shadow 0.5s ease-in-out;
 }
