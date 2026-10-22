@@ -17,7 +17,6 @@ body {
   overflow: hidden;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
-  overflow: hidden;
 }
 
 button {
@@ -274,4 +273,140 @@ h1 {
     inset 0 0 200px rgba(255, 190, 0, 0.35),
     0 0 100px rgba(255, 215, 0, 0.6);
   display: none;
+}
+
+.para {
+  filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.8));
+  animation:
+    para-spawn 0.45s cubic-bezier(0.2, 1.6, 0.4, 1),
+    para-float 2.4s ease-in-out 0.45s infinite;
+}
+
+.para.para-expiring {
+  animation:
+    para-float 2.4s ease-in-out infinite,
+    para-blink 0.35s ease-in-out infinite alternate;
+}
+
+.para.para-pop {
+  animation: para-pop 0.4s ease-out forwards;
+}
+
+.para.para-fade {
+  animation: para-fade 0.5s ease-in forwards;
+}
+
+@keyframes para-spawn {
+  from { scale: 0; rotate: -180deg; opacity: 0; }
+  to   { scale: 1; rotate: 0deg;    opacity: 1; }
+}
+
+@keyframes para-float {
+  0%, 100% { translate: 0 0;     rotate: -3deg; }
+  50%      { translate: 0 -12px; rotate: 3deg;  }
+}
+
+@keyframes para-blink {
+  from { opacity: 1; }
+  to   { opacity: 0.3; }
+}
+
+@keyframes para-pop {
+  to { scale: 1.8; opacity: 0; }
+}
+
+@keyframes para-fade {
+  to { scale: 0.3; rotate: 90deg; opacity: 0; }
+}
+
+.para-spark {
+  position: fixed;
+  width: 10px;
+  height: 8px;
+  background: gold;
+  clip-path: polygon(25% 0, 100% 0, 75% 100%, 0 100%);
+  pointer-events: none;
+  z-index: 1001;
+  animation: spark 0.6s ease-out forwards;
+}
+
+@keyframes spark {
+  from { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+  to   { transform: translate(var(--dx), var(--dy)) rotate(360deg); opacity: 0; }
+}
+
+#crypto-rain {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.45;
+}
+
+#buff-area {
+  position: fixed;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 10000;
+  pointer-events: none;
+}
+
+.buff-chip {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 190px;
+  padding: 8px 14px 12px;
+  font: 700 0.95rem system-ui, sans-serif;
+  color: #5a4300;
+  background: #fff8dc;
+  border: 2px solid #f0b400;
+  border-radius: 10px;
+  box-shadow: 0 4px 14px rgba(255, 190, 0, 0.45);
+  animation: buff-in 0.3s cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+
+.buff-chip .buff-name {
+  flex: 1;
+}
+
+.buff-chip .buff-time {
+  font-variant-numeric: tabular-nums;
+  min-width: 2.8em;
+  text-align: right;
+}
+
+.buff-chip .buff-bar {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 4px;
+  width: 100%;
+  background: #f0b400;
+  transform-origin: left;
+}
+
+.buff-chip.ending {
+  animation: buff-ending 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes buff-in {
+  from { transform: translateY(-20px) scale(0.8); opacity: 0; }
+  to   { transform: translateY(0) scale(1);       opacity: 1; }
+}
+
+@keyframes buff-ending {
+  from { opacity: 1; }
+  to   { opacity: 0.55; }
+}
+
+.boosted {
+  color: #d49a00;
 }
