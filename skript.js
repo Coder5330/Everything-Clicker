@@ -1,3 +1,4 @@
+(() => {
 const btn = document.getElementById("click-btn");
 const countText = document.getElementById("count");
 const clickText = document.getElementById("click-str");
@@ -16,8 +17,12 @@ const SPAWN_MAX = 900;
 const PARALLELOGRAM_SIZE = 80;
 const PARALLELOGRAM_LIFETIME = 8000;
 const RAIN_FONT_SIZE = 16;
+const REBIRTH_COST = 1e18;
 const CRYPTO_UPGRADE_NAME = "Crypto Mining Software";
 const PARALLELOGRAM_UPGRADE_NAME = "I am a Parallelogram";
+const SALT = "x9#kQ-parallelogram-7f2";
+const MAX_CPS = 25;
+
 const suffix = [
   "K", "M", "B", "T", "Qa", "Qi", "Sx", "Sp", "Oc", "No", 
   "Dc", "UDc", "DDc", "TDc", "QaDc", "QiDc", "SxDc", "SpDc", "OcDc", "NoDc", 
@@ -46,6 +51,10 @@ let parallelogramsOn = false;
 let lastFrame = performance.now();
 let lastSave = 0;
 
+let trustedCount = 0;
+let trustedPurchasedTotal = 0;
+let clickTimes = [];
+
 const parallelogramImage = new Image();
 parallelogramImage.src = "parallelogram.png";
 
@@ -65,6 +74,81 @@ const rainCtx = rainCanvas.getContext("2d");
 let rainDrops = [];
 let rainLastRow = [];
 let rainWasActive = false;
+
+function hash(str) {
+	let h1 = 0xdeadbeef, h2 = 0x41c6ce57;
+	for (let i = 0; i < str.length; i++) {
+		const ch = str.charCodeAt(i);
+		h1 = Math.imul(h1 ^ ch, 2654435761);
+		h2 = Math.imul(h2 ^ ch, 1597334677);
+	}
+	h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+	h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+	return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(36);
+}
+
+function sign(countVal, purchasedJSON, rebirthFlag) {
+	return hash(Math.floor(countVal) + "|" + purchasedJSON + "|" + (rebirthFlag ? "R|" : "") + SALT);
+}
+
+function purchasedMap() {
+	const map = {};
+	for (const item of data) map[item.upgrade] = item.purchased || 0;
+	return map;
+}
+
+function purchasedTotal() {
+	return data.reduce((s, i) => s + (i.purchased || 0), 0);
+}
+
+function commit() {
+	trustedCount = count;
+	trustedPurchasedTotal = purchasedTotal();
+}
+
+function flagCheat(reason) {
+	if (cheated) return;
+	cheated = true;
+	console.warn("Cheat detected:", reason);
+	localStorage.setItem("cheater", "1");
+
+	count = 0;
+	rebirthed = false;
+	for (const item of data) item.purchased = 0;
+	localStorage.removeItem("gameCount");
+	localStorage.removeItem("purchased");
+	localStorage.removeItem("rebirthed");
+	localStorage.removeItem("sig");
+	recalcStats();
+	commit();
+
+	const banner = document.createElement("div");
+	banner.textContent = "Cheaters are bad. Your progress has been reset.";
+	banner.style.cssText =
+		"position:fixed;top:0;left:0;right:0;padding:12px;background:#b00020;" +
+		"color:#fff;text-align:center;z-index:99999;font-weight:bold";
+	document.body.appendChild(banner);
+	alert("cheaters are bad");
+}
+
+function checkIntegrity() {
+	if (cheated || !data.length) return;
+	const drift = Math.abs(count - trustedCount);
+	if (drift > Math.max(1e-6 * Math.abs(trustedCount), 1e-6)) {
+		flagCheat("count modified outside game logic");
+	} else if (purchasedTotal() !== trustedPurchasedTotal) {
+		flagCheat("upgrades modified outside game logic");
+	}
+}
+
+function registerClick(event) {
+	if (!event.isTrusted) return flagCheat("synthetic click"), false;
+	const now = performance.now();
+	clickTimes.push(now);
+	clickTimes = clickTimes.filter(t => now - t < 1000);
+	if (clickTimes.length > MAX_CPS) return flagCheat("autoclicker"), false;
+	return true;
+}
 
 function format(n) {
 	n = Number(n);
@@ -136,15 +220,14 @@ async function loadGameData() {
 }
 
 function saveCount() {
+	if (!data.length) return;
 	localStorage.setItem('gameCount', count);
+	localStorage.setItem('rebirthed', rebirthed ? "1" : "0");
+	localStorage.setItem('sig', sign(count, JSON.stringify(purchasedMap()), rebirthed));
 }
 
 function saveProgress() {
-	const purchased = {};
-	for (const item of data) {
-		purchased[item.upgrade] = item.purchased;
-	}
-	localStorage.setItem('purchased', JSON.stringify(purchased));
+	localStorage.setItem('purchased', JSON.stringify(purchasedMap()));
 	saveCount();
 }
 
@@ -274,7 +357,8 @@ function spawnParallelogram() {
 	el.style.zIndex = "1000";
 	el.style.userSelect = "none";
 
-	el.addEventListener("click", () => {
+	el.addEventListener("click", (e) => {
+		if (!e.isTrusted) return flagCheat("synthetic boost click");
 		if (!parallelograms.includes(el)) return;
 		const rect = el.getBoundingClientRect();
 		burstSparkles(rect.left + rect.width / 2, rect.top + rect.height / 2);
@@ -381,6 +465,7 @@ function refreshUpgradeButtons() {
 
 function addMoney(amount) {
 	count += amount * getBoostMultiplier();
+	commit();
 	saveCount();
 	render();
 }
@@ -393,10 +478,13 @@ function gameLoop(now) {
 	const dt = (now - lastFrame) / 1000;
 	lastFrame = now;
 
+	checkIntegrity();
+
 	updateBuffs(now);
 
 	if (autoadd > 0) {
-		count += autoadd * getBoostMultiplier() * dt;
+		count += autoadd * getBoostMultiplier() * Math.min(dt, 1);
+		commit();
 	}
 
 	drawRain(dt);
@@ -413,6 +501,7 @@ function gameLoop(now) {
 }
 
 function upgrade(i) {
+	if (cheated) return;
 	const item = data[i];
 	const price = currentCost(item);
 
@@ -427,6 +516,7 @@ function upgrade(i) {
 
 	count -= price;
 	item.purchased++;
+	commit();
 
 	saveProgress();
 	recalcStats();
@@ -476,17 +566,27 @@ async function runGame() {
 	data = loaded;
 
 	count = loadCount();
+	rebirthed = localStorage.getItem('rebirthed') === "1";
 
 	const purchased = loadPurchased();
 	for (const item of data) {
 		item.purchased = purchased[item.upgrade] || 0;
 	}
 
+	const sig = localStorage.getItem('sig');
+	const hasSave = localStorage.getItem('gameCount') !== null;
+	const tampered =
+		localStorage.getItem("cheater") === "1" ||
+		(hasSave && sig && sig !== sign(count, JSON.stringify(purchasedMap()), rebirthed));
+
 	localStorage.removeItem('gamedata');
 	localStorage.removeItem('gameDataHasCached');
 
-	saveProgress();
 	recalcStats();
+	commit();
+	if (tampered) flagCheat("save file tampered");
+
+	saveProgress();
 	makeUpgradeButtons();
 	render();
 }
@@ -502,38 +602,32 @@ function rebirth_render() {
 		void rebirth_btn.offsetWidth;
 	}
 
-	const canRebirth = count >= 1e10;
+	const canRebirth = !cheated && count >= REBIRTH_COST;
 	rebirth_btn.classList.toggle("visible", canRebirth);
 	rebirth_btn.disabled = !canRebirth;
 }
 
 function rebirth_logic(event) {
-	if (count >= 1e18) {
+	if (cheated) return;
+	if (count >= REBIRTH_COST) {
 		count = 0;
 		rebirthed = true;
-		export { rebirthed };
+		commit();
+		saveProgress();
 		window.location.href = "i.html";
 	}
-}
-
-function cheat() {
-	for (const item of data) {
-		item.purchased = item.buycap;
-	}
-	count = 0;
-	cheated = true;
-	alert("cheaters are bad")
-	
-	saveProgress();
-	recalcStats();
-	render();
 }
 
 window.addEventListener("resize", resizeRain);
 resizeRain();
 
-btn.addEventListener("click", () => addMoney(inc));
+btn.addEventListener("click", (e) => {
+	if (!data.length) return;
+	if (!registerClick(e)) return;
+	addMoney(inc);
+});
 setInterval(update, 1000);
 runGame();
 pulseGlow();
 requestAnimationFrame(gameLoop);
+})();
