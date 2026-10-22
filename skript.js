@@ -23,6 +23,8 @@ let boost = false;
 let boostTimer = BOOST_DURATION;
 let parallelograms = [];
 let parallelogramsOn = true;
+let lastFrame = performance.now();
+let lastSave = 0;
 
 const parallelogramImage = new Image();
 parallelogramImage.src = "parallelogram.png";
@@ -100,7 +102,7 @@ function loadPurchased() {
 }
 
 function loadCount() {
-	const savedCount = parseInt(localStorage.getItem('gameCount'), 10);
+	const savedCount = parseFloat(localStorage.getItem('gameCount'));
 	return Number.isFinite(savedCount) ? savedCount : 0;
 }
 
@@ -171,15 +173,19 @@ function refreshUpgradeButtons() {
 	for (const item of data) {
 		if (!item.btn) continue;
 
+		let text, disabled;
 		if (item.purchased >= item.buycap) {
-			item.btn.textContent = "MAXED (" + item.purchased + ")";
-			item.btn.disabled = true;
+			text = "MAXED (" + item.purchased + ")";
+			disabled = true;
 		} else {
 			const price = currentCost(item);
-			item.btn.textContent = "Cost:$" + price.toLocaleString()
+			text = "Cost:$" + price.toLocaleString()
 				+ " (" + item.purchased + "/" + item.buycap + ")";
-			item.btn.disabled = count < price;
+			disabled = count < price;
 		}
+
+		if (item.btn.textContent !== text) item.btn.textContent = text;
+		if (item.btn.disabled !== disabled) item.btn.disabled = disabled;
 	}
 }
 
@@ -190,8 +196,25 @@ function addMoney(amount) {
 }
 
 function update() {
-	addMoney(autoadd);
 	updateBoost();
+}
+
+function gameLoop(now) {
+	const dt = (now - lastFrame) / 1000;
+	lastFrame = now;
+
+	if (autoadd > 0) {
+		count += autoadd * getBoostMultiplier() * dt;
+	}
+
+	render();
+
+	if (now - lastSave > 1000) {
+		saveCount();
+		lastSave = now;
+	}
+
+	requestAnimationFrame(gameLoop);
 }
 
 function upgrade(i) {
@@ -249,7 +272,7 @@ function makeUpgradeButtons() {
 
 function render() {
 	const boostMultiplier = getBoostMultiplier();
-	countText.textContent = "$" + count;
+	countText.textContent = "$" + Math.floor(count);
 	clickText.textContent = inc * boostMultiplier;
 	autoText.textContent = autoadd * boostMultiplier;
 	refreshUpgradeButtons();
@@ -279,3 +302,4 @@ btn.addEventListener("click", () => addMoney(inc));
 setInterval(update, 1000);
 runGame();
 pulseGlow();
+requestAnimationFrame(gameLoop);
