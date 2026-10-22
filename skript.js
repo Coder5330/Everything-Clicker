@@ -12,7 +12,6 @@ const SPAWN_MAX = 90;
 const PARALLELOGRAM_SIZE = 80;
 const PARALLELOGRAM_LIFETIME = 8000;
 
-
 let intensity = 40;
 let growing = true;
 let count = 0;
