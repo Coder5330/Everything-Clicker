@@ -252,6 +252,12 @@ function gameLoop(now) {
 	}
 
 	render();
+	
+	if (boost) {
+		glowContainer.style.display = "block";
+	} else {
+		glowContainer.style.display = "none";
+	}
 
 	if (now - lastSave > 1000) {
 		saveCount();
@@ -272,12 +278,6 @@ function upgrade(i) {
 	if (count < price) {
 		alert("You don't have enough money");
 		return;
-	}
-
-	if (boost) {
-		glowContainer.style.display = "block";
-	} else {
-		glowContainer.style.display = "none";
 	}
 
 	count -= price;
