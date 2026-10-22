@@ -64,7 +64,18 @@
 	 "purchased":0,
 	  "multiplier": 1.2,
 	 "buylimitmsg":"All sea shipments now require your boats.(buy limit reached)"
-  }
+  },
+  {
+	 "upgrade":"Cryptonining Software",
+	 "cost":500000,
+	 "ClickIncrease":0,
+	 "PerSecIncrease":400,
+	 "description":"Are you hacking??",
+	 "buycap":50,
+	 "purchased":0,
+	  "multiplier": 1.2,
+	 "buylimitmsg":"You got caught by the police.(buy limit reached)"
+  },
 ]
 
 
