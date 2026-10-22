@@ -6,6 +6,7 @@ const autoText = document.getElementById("auto-str");
 const upgradesContainer = document.getElementById("upgrade-area");
 const rebirth_area = document.getElementById("rebirth");
 let rebirth_btn = null;
+let rebirthed = false;
 let cheated = false;
 const glowContainer = document.getElementById('screen-glow');
 
@@ -16,9 +17,9 @@ const SPAWN_MAX = 900;
 const PARALLELOGRAM_SIZE = 80;
 const PARALLELOGRAM_LIFETIME = 8000;
 const RAIN_FONT_SIZE = 16;
+const REBIRTH_COST = 1e18;
 const CRYPTO_UPGRADE_NAME = "Crypto Mining Software";
 const PARALLELOGRAM_UPGRADE_NAME = "I am a Parallelogram";
-
 const SALT = "x9#kQ-parallelogram-7f2";
 const MAX_CPS = 25;
 
@@ -74,7 +75,6 @@ let rainDrops = [];
 let rainLastRow = [];
 let rainWasActive = false;
 
-
 function hash(str) {
 	let h1 = 0xdeadbeef, h2 = 0x41c6ce57;
 	for (let i = 0; i < str.length; i++) {
@@ -87,11 +87,20 @@ function hash(str) {
 	return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(36);
 }
 
-function sign(countVal, purchasedJSON) {
-	return hash(Math.floor(countVal) + "|" + purchasedJSON + "|" + SALT);
+function sign(countVal, purchasedJSON, rebirthFlag) {
+	return hash(Math.floor(countVal) + "|" + purchasedJSON + "|" + (rebirthFlag ? "R|" : "") + SALT);
 }
 
 function purchasedMap() {
+	const map = {};
+	const sorted = data.slice().sort((a, b) => (a.upgrade < b.upgrade ? -1 : 1));
+	for (const item of sorted) {
+		if (item.purchased) map[item.upgrade] = item.purchased;
+	}
+	return map;
+}
+
+function legacyPurchasedMap() {
 	const map = {};
 	for (const item of data) map[item.upgrade] = item.purchased || 0;
 	return map;
@@ -113,19 +122,22 @@ function flagCheat(reason) {
 	localStorage.setItem("cheater", "1");
 
 	count = 0;
+	rebirthed = false;
 	for (const item of data) item.purchased = 0;
 	localStorage.removeItem("gameCount");
 	localStorage.removeItem("purchased");
+	localStorage.removeItem("rebirthed");
 	localStorage.removeItem("sig");
 	recalcStats();
 	commit();
 
 	const banner = document.createElement("div");
-	banner.textContent = "Cheating detected. Your progress has been reset.";
+	banner.textContent = "Cheaters are bad. Your progress has been reset.";
 	banner.style.cssText =
 		"position:fixed;top:0;left:0;right:0;padding:12px;background:#b00020;" +
 		"color:#fff;text-align:center;z-index:99999;font-weight:bold";
 	document.body.appendChild(banner);
+	alert("cheaters are bad");
 }
 
 function checkIntegrity() {
@@ -219,7 +231,8 @@ async function loadGameData() {
 function saveCount() {
 	if (!data.length) return;
 	localStorage.setItem('gameCount', count);
-	localStorage.setItem('sig', sign(count, JSON.stringify(purchasedMap())));
+	localStorage.setItem('rebirthed', rebirthed ? "1" : "0");
+	localStorage.setItem('sig', sign(count, JSON.stringify(purchasedMap()), rebirthed));
 }
 
 function saveProgress() {
@@ -471,7 +484,7 @@ function update() {
 }
 
 function gameLoop(now) {
-	const dt = (now - lastFrame) / 1000;
+	const dt = Math.max(0, (now - lastFrame) / 1000);
 	lastFrame = now;
 
 	checkIntegrity();
@@ -479,7 +492,7 @@ function gameLoop(now) {
 	updateBuffs(now);
 
 	if (autoadd > 0) {
-		count += autoadd * getBoostMultiplier() * Math.min(dt, 1); // cap dt for tab throttling
+		count += autoadd * getBoostMultiplier() * Math.min(dt, 1);
 		commit();
 	}
 
@@ -552,6 +565,7 @@ function render() {
 	autoText.textContent = formatter.format(autoadd * boostMultiplier);
 	clickText.classList.toggle("boosted", boost);
 	autoText.classList.toggle("boosted", boost);
+	export {rebirthed};
 	refreshUpgradeButtons();
 	rebirth_render();
 }
@@ -562,6 +576,7 @@ async function runGame() {
 	data = loaded;
 
 	count = loadCount();
+	rebirthed = localStorage.getItem('rebirthed') === "1";
 
 	const purchased = loadPurchased();
 	for (const item of data) {
@@ -572,7 +587,9 @@ async function runGame() {
 	const hasSave = localStorage.getItem('gameCount') !== null;
 	const tampered =
 		localStorage.getItem("cheater") === "1" ||
-		(hasSave && sig && sig !== sign(count, JSON.stringify(purchasedMap())));
+		(hasSave && sig &&
+			sig !== sign(count, JSON.stringify(purchasedMap()), rebirthed) &&
+			sig !== sign(count, JSON.stringify(legacyPurchasedMap()), rebirthed));
 
 	localStorage.removeItem('gamedata');
 	localStorage.removeItem('gameDataHasCached');
@@ -597,14 +614,18 @@ function rebirth_render() {
 		void rebirth_btn.offsetWidth;
 	}
 
-	const canRebirth = !cheated && count >= 1e10;
+	const canRebirth = !cheated && count >= REBIRTH_COST;
 	rebirth_btn.classList.toggle("visible", canRebirth);
 	rebirth_btn.disabled = !canRebirth;
 }
 
 function rebirth_logic(event) {
 	if (cheated) return;
-	if (count >= 1e10) {
+	if (count >= REBIRTH_COST) {
+		count = 0;
+		rebirthed = true;
+		commit();
+		saveProgress();
 		window.location.href = "i.html";
 	}
 }
