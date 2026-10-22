@@ -108,5 +108,16 @@
 		 "purchased":0,
 		  "multiplier": 1.15,
 		 "buylimitmsg":"You already bought this upgrade"
+	},
+	{
+		 "upgrade":"Buy Microsoft",
+		 "cost":3960000000000,
+		 "ClickIncrease":0,
+		 "PerSecIncrease":1000000000000,
+		 "description": "Copilot for everyone!!!",
+		 "buycap":10,
+		 "purchased":0,
+		  "multiplier": 1.15,
+		 "buylimitmsg":"You got sued for cheating your workers. "
 	}
 ]
