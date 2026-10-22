@@ -12,6 +12,11 @@ const SPAWN_MAX = 90;
 const PARALLELOGRAM_SIZE = 80;
 const PARALLELOGRAM_LIFETIME = 8000;
 
+const formatter = new Intl.NumberFormat('en-US', {
+	notation: 'compact',
+	compactDisplay: 'long'
+});
+
 let intensity = 40;
 let growing = true;
 let count = 0;
@@ -272,9 +277,9 @@ function makeUpgradeButtons() {
 
 function render() {
 	const boostMultiplier = getBoostMultiplier();
-	countText.textContent = "$" + Math.floor(count);
-	clickText.textContent = inc * boostMultiplier;
-	autoText.textContent = autoadd * boostMultiplier;
+	countText.textContent = "$" + formatter.format(Math.floor(count));
+	clickText.textContent = formatter.format(inc * boostMultiplier);
+	autoText.textContent = formatter.format(autoadd * boostMultiplier);
 	refreshUpgradeButtons();
 }
 
