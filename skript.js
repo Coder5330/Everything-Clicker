@@ -565,7 +565,6 @@ function render() {
 	autoText.textContent = formatter.format(autoadd * boostMultiplier);
 	clickText.classList.toggle("boosted", boost);
 	autoText.classList.toggle("boosted", boost);
-	export {rebirthed};
 	refreshUpgradeButtons();
 	rebirth_render();
 }
