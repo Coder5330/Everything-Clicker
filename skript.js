@@ -42,10 +42,10 @@ function currentCost(item) {
 
 function pulseGlow() {
 	if (growing) {
-	    intensity += 3;
+	    intensity += 1;
 	    if (intensity >= 80) growing = false;
 	} else {
-	    intensity -= 3;
+	    intensity -= 1;
 	    if (intensity <= 30) growing = true;
 	}
 	  
@@ -205,6 +205,12 @@ function upgrade(i) {
 	if (count < price) {
 		alert("You don't have enough money");
 		return;
+	}
+
+	if (boost) {
+		glowContainer.style.display = "block";
+	} else {
+		glowContainer.style.display = "none";
 	}
 
 	count -= price;
