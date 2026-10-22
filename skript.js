@@ -19,9 +19,8 @@ const RAIN_FONT_SIZE = 16;
 const CRYPTO_UPGRADE_NAME = "Crypto Mining Software";
 const PARALLELOGRAM_UPGRADE_NAME = "I am a Parallelogram";
 
-// ---- anti-cheat config ----
 const SALT = "x9#kQ-parallelogram-7f2";
-const MAX_CPS = 25; // humanly plausible clicks per second
+const MAX_CPS = 25;
 
 const suffix = [
   "K", "M", "B", "T", "Qa", "Qi", "Sx", "Sp", "Oc", "No", 
@@ -51,7 +50,6 @@ let parallelogramsOn = false;
 let lastFrame = performance.now();
 let lastSave = 0;
 
-// anti-cheat state
 let trustedCount = 0;
 let trustedPurchasedTotal = 0;
 let clickTimes = [];
@@ -76,9 +74,8 @@ let rainDrops = [];
 let rainLastRow = [];
 let rainWasActive = false;
 
-// ================= anti-cheat =================
 
-function hash(str) { // cyrb53, a fast non-crypto hash
+function hash(str) {
 	let h1 = 0xdeadbeef, h2 = 0x41c6ce57;
 	for (let i = 0; i < str.length; i++) {
 		const ch = str.charCodeAt(i);
@@ -104,7 +101,6 @@ function purchasedTotal() {
 	return data.reduce((s, i) => s + (i.purchased || 0), 0);
 }
 
-// call after every legitimate change to count or purchases
 function commit() {
 	trustedCount = count;
 	trustedPurchasedTotal = purchasedTotal();
@@ -116,7 +112,6 @@ function flagCheat(reason) {
 	console.warn("Cheat detected:", reason);
 	localStorage.setItem("cheater", "1");
 
-	// punish: wipe progress
 	count = 0;
 	for (const item of data) item.purchased = 0;
 	localStorage.removeItem("gameCount");
@@ -151,8 +146,6 @@ function registerClick(event) {
 	if (clickTimes.length > MAX_CPS) return flagCheat("autoclicker"), false;
 	return true;
 }
-
-// ================= game =================
 
 function format(n) {
 	n = Number(n);
@@ -224,7 +217,7 @@ async function loadGameData() {
 }
 
 function saveCount() {
-	if (!data.length) return; // don't write a signature before data is loaded
+	if (!data.length) return;
 	localStorage.setItem('gameCount', count);
 	localStorage.setItem('sig', sign(count, JSON.stringify(purchasedMap())));
 }
@@ -575,7 +568,6 @@ async function runGame() {
 		item.purchased = purchased[item.upgrade] || 0;
 	}
 
-	// verify save signature (old unsigned saves are accepted once, then signed)
 	const sig = localStorage.getItem('sig');
 	const hasSave = localStorage.getItem('gameCount') !== null;
 	const tampered =
@@ -617,13 +609,11 @@ function rebirth_logic(event) {
 	}
 }
 
-// cheat() removed: everything is inside an IIFE, so nothing is reachable from the console.
-
 window.addEventListener("resize", resizeRain);
 resizeRain();
 
 btn.addEventListener("click", (e) => {
-	if (!data.length) return; // game data not loaded yet
+	if (!data.length) return;
 	if (!registerClick(e)) return;
 	addMoney(inc);
 });
