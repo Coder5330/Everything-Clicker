@@ -42,10 +42,10 @@ function currentCost(item) {
 
 function pulseGlow() {
 	if (growing) {
-	    intensity += 1;
+	    intensity += 3;
 	    if (intensity >= 80) growing = false;
 	} else {
-	    intensity -= 1;
+	    intensity -= 3;
 	    if (intensity <= 30) growing = true;
 	}
 	  
