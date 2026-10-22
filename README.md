@@ -30,7 +30,9 @@ ONLY USE AI FOR CSS
 
 - Update pre-pre alpha 0.1.5: added parallelograms that spawn, added more upgrades and made upgrades scale.
 
-- **Update pre-pre alpha 0.1.6: added 'thousand' system that makes numbers shorter.**
+- Update pre-pre alpha 0.1.6: added 'thousand' system that makes numbers shorter.
+
+- **Update pre-pre alpha 0.1.7: added rebirth system that does not actually rebirth yet.**
 
 
 
