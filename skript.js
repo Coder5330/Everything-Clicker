@@ -1,20 +1,34 @@
-let count = 0;
 const btn = document.getElementById("click-btn");
-const txt1 = document.getElementById("count");
-const txt2 = document.getElementById("click-str");
-const txt3 = document.getElementById("auto-str");
+const countText = document.getElementById("count");
+const clickText = document.getElementById("click-str");
+const autoText = document.getElementById("auto-str");
 const upgradesContainer = document.getElementById("upgrade-area");
+
+const BOOST_MULTIPLIER = 7;
+const BOOST_DURATION = 60;
+
+let count = 0;
 let inc = 1;
 let autoadd = 0;
 let data = [];
-let time = 0;
-let timer = Math
+let timer = randint(300, 900);
+let boost = false;
+let boostTimer = BOOST_DURATION;
 let parallelograms = [];
 let parallelogramsOn = false;
+
 const parallelogramImage = new Image();
 parallelogramImage.src = "parallelogram.png";
 
-async function loadgamedata() {
+function randint(min, max) {
+	return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function getMultiplier() {
+	return boost ? BOOST_MULTIPLIER : 1;
+}
+
+async function loadGameData() {
 	try {
 		const response = await fetch('./upgrades.json');
 		return await response.json();
@@ -24,8 +38,8 @@ async function loadgamedata() {
 	}
 }
 
-function randint(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+function saveCount() {
+	localStorage.setItem('gameCount', count);
 }
 
 function saveProgress() {
@@ -34,7 +48,7 @@ function saveProgress() {
 		purchased[item.upgrade] = item.purchased;
 	}
 	localStorage.setItem('purchased', JSON.stringify(purchased));
-	localStorage.setItem('gameCount', count);
+	saveCount();
 }
 
 function loadPurchased() {
@@ -55,12 +69,108 @@ function loadPurchased() {
 	return {};
 }
 
-async function rungame() {
-	data = await loadgamedata();
+function loadCount() {
+	const savedCount = parseInt(localStorage.getItem('gameCount'), 10);
+	return Number.isFinite(savedCount) ? savedCount : 0;
+}
+
+function recalcStats() {
+	inc = 1;
+	autoadd = 0;
+	for (const item of data) {
+		inc += item.purchased * (item.ClickIncrease || 0);
+		autoadd += item.purchased * (item.PerSecIncrease || 0);
+	}
+}
+
+function updateBoost() {
+	if (!parallelogramsOn) return;
+
+	timer--;
+	if (timer <= 0) {
+		timer = randint(300, 900);
+		boost = true;
+	}
+
+	if (boost) {
+		boostTimer--;
+		if (boostTimer <= 0) {
+			boost = false;
+			boostTimer = BOOST_DURATION;
+		}
+	}
+}
+
+function addMoney(amount) {
+	count += amount * getMultiplier();
+	saveCount();
+	render();
+}
+
+function update() {
+	addMoney(autoadd);
+	updateBoost();
+}
+
+function upgrade(i) {
+	const item = data[i];
+
+	if (count < item.cost) {
+		alert("You don't have enough money");
+		return;
+	}
+	if (item.purchased >= item.buycap) {
+		alert(item.buylimitmsg);
+		return;
+	}
+
+	if (item.upgrade == "I am a Parallelogram") {
+		parallelogramsOn = true;
+	}
+
+	count -= item.cost;
+	item.purchased++;
+
+	saveProgress();
+	recalcStats();
+	render();
+}
+
+function makeUpgradeButtons() {
+	upgradesContainer.innerHTML = '';
+
+	data.forEach((item, i) => {
+		const upgradeBox = document.createElement("div");
+		upgradeBox.className = "upgrades";
+
+		const info = document.createElement("span");
+		info.textContent = item.upgrade;
+		info.className = "upgrade-name";
+
+		const newBtn = document.createElement("button");
+		newBtn.textContent = "Cost:$" + item.cost;
+		newBtn.title = item.description;
+		newBtn.className = "upgrade-btn";
+		newBtn.onclick = () => upgrade(i);
+
+		upgradeBox.appendChild(info);
+		upgradeBox.appendChild(newBtn);
+		upgradesContainer.appendChild(upgradeBox);
+	});
+}
+
+function render() {
+	const multiplier = getMultiplier();
+	countText.textContent = "$" + count;
+	clickText.textContent = inc * multiplier;
+	autoText.textContent = autoadd * multiplier;
+}
+
+async function runGame() {
+	data = await loadGameData();
 	if (!data) return;
 
-	const savedCount = parseInt(localStorage.getItem('gameCount'), 10);
-	count = Number.isFinite(savedCount) ? savedCount : 0;
+	count = loadCount();
 
 	const purchased = loadPurchased();
 	for (const item of data) {
@@ -71,81 +181,11 @@ async function rungame() {
 	localStorage.removeItem('gameDataHasCached');
 
 	saveProgress();
-	check_upgrades();
+	recalcStats();
+	render();
 	makeUpgradeButtons();
 }
 
-function increase(event) {
-	count += inc;
-	localStorage.setItem('gameCount', count);
-	render();
-}
-
-function autoinc() {
-	count += autoadd;
-	localStorage.setItem('gameCount', count);
-	render();
-	if (parallelogramsOn) {
-		if (
-	}
-}
-
-function render() {
-	txt1.textContent = "$"+ count;
-	txt2.textContent = inc;
-	txt3.textContent = autoadd;
-}
-
-function check_upgrades() {
-	inc = 1;
-	autoadd = 0;
-	for (let i = 0; i < data.length; i++) {
-		inc += data[i]["purchased"] * (data[i]["ClickIncrease"] || 0);
-		autoadd += data[i]["purchased"] * (data[i]["PerSecIncrease"] || 0);
-	}
-	render();
-}
-
-function makeUpgradeButtons() {
-	upgradesContainer.innerHTML = '';
-
-	for (let i = 0; i < data.length; i++) {
-		const upgradeBox = document.createElement("div");
-		upgradeBox.className = "upgrades";
-
-		const info = document.createElement("span");
-		info.textContent = data[i]["upgrade"];
-		info.className = "upgrade-name";
-
-		const newBtn = document.createElement("button");
-		newBtn.textContent = "Cost:$" + data[i]["cost"];
-		newBtn.title = data[i]["description"];
-		newBtn.className = "upgrade-btn";
-		newBtn.onclick = () => Upgrade(i);
-
-		upgradeBox.appendChild(info);
-		upgradeBox.appendChild(newBtn);
-
-		upgradesContainer.appendChild(upgradeBox);
-	}
-}
-
-function Upgrade(i) {
-	if (count >= data[i]["cost"] && data[i]["purchased"] < data[i]["buycap"]) {
-		count -= data[i]["cost"];
-		data[i]["purchased"]++;
-
-		saveProgress();
-		check_upgrades();
-	}
-	else if (count < data[i]["cost"]) {
-		alert("You don't have enough money");
-	}
-	else {
-		alert(data[i]["buylimitmsg"]);
-	}
-}
-
-btn.addEventListener("click", increase);
-const intervalId = setInterval(autoinc, 1000);
-rungame();
+btn.addEventListener("click", () => addMoney(inc));
+setInterval(update, 1000);
+runGame();
