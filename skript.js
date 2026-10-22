@@ -5,6 +5,7 @@ const autoText = document.getElementById("auto-str");
 const upgradesContainer = document.getElementById("upgrade-area");
 const rebirth_area = document.getElementById("rebirth");
 let rebirth_btn = null;
+let cheated = false;
 const glowContainer = document.getElementById('screen-glow');
 
 const BOOST_MULTIPLIER = 7;
@@ -516,6 +517,7 @@ function cheat() {
 		item.purchased = item.buycap;
 	}
 	count = 1e100;
+	cheated = true;
 
 	saveProgress();
 	recalcStats();
