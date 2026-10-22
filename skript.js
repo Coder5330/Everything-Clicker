@@ -250,6 +250,12 @@ function gameLoop(now) {
 	}
 
 	render();
+	
+	if (boost) {
+		glowContainer.style.display = "block";
+	} else {
+		glowContainer.style.display = "none";
+	}
 
 	if (now - lastSave > 1000) {
 		saveCount();
@@ -312,13 +318,6 @@ function render() {
 	clickText.textContent = formatter.format(inc * boostMultiplier);
 	autoText.textContent = formatter.format(autoadd * boostMultiplier);
 	refreshUpgradeButtons();
-
-	
-	if (boost) {
-		glowContainer.style.display = "block";
-	} else {
-		glowContainer.style.display = "none";
-	}
 }
 
 async function runGame() {
