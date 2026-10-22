@@ -5,6 +5,7 @@ const autoText = document.getElementById("auto-str");
 const upgradesContainer = document.getElementById("upgrade-area");
 const rebirth_area = document.getElementById("rebirth");
 let rebirth_btn = null;
+let rebirthed = false;
 let cheated = false;
 const glowContainer = document.getElementById('screen-glow');
 
@@ -507,7 +508,10 @@ function rebirth_render() {
 }
 
 function rebirth_logic(event) {
-	if (count >= 1e10) {
+	if (count >= 1e18) {
+		count = 0;
+		rebirthed = true;
+		export { rebirthed };
 		window.location.href = "i.html";
 	}
 }
@@ -516,9 +520,10 @@ function cheat() {
 	for (const item of data) {
 		item.purchased = item.buycap;
 	}
-	count = 1e100;
+	count = 0;
 	cheated = true;
-
+	alert("cheaters are bad")
+	
 	saveProgress();
 	recalcStats();
 	render();
