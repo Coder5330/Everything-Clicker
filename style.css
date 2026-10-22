@@ -12,6 +12,7 @@ body {
     height: 100vh;
     overflow-y: auto;
     padding: 16px;
+    margin: 0;
 }
 
 #container {
