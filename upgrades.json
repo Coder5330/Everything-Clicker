@@ -1,15 +1,16 @@
 [
-  {
-    	"upgrade": "Basic capitalisation",
+	{
+    	"upgrade": "Newbie Capitalism",
     	"cost": 10,
     	"ClickIncrease": 1,
-	"PerSecIncrease": 0,
+		"PerSecIncrease": 0,
     	"description":"The first step to owning everything.",
     	"buycap":50,
     	"purchased":0,
+	  	"multiplier": 1.15,
     	"buylimitmsg":"You are now in the top 0.01% of richness, basic plans no longer interests you.(buy limit reached)"
-  },
-  {
+	},
+	{
     	"upgrade": "Willing Slave-I mean residents",
     	"cost": 50,
     	"ClickIncrease": 0,
@@ -17,48 +18,106 @@
     	"description":"Hey, if it works it works man. They signed the Terms and Conditons for free housing.",
     	"buycap":100,
     	"purchased":0,
+	  	"multiplier": 1.15,
     	"buylimitmsg":"you ran out of space in your capitalist state.(buy limit reached)"
-  },
-  {
-	 "upgrade":"Long Term Investments",
-	 "cost":1000,
-	 "ClickIncrease":0,
-	 "PerSecIncrease":3,
-	 "description":"Who knew stocks made passive income?",
-	 "buycap":300,
-	 "purchased":0,
-	 "buylimitmsg":"All companies rely on your shares to obtain funding.(buy limit reached)"
-  },
-  {
-	 "upgrade":"Housing Development Board",
-	 "cost":10000,
-	 "ClickIncrease":5,
-	 "PerSecIncrease":5,
-	 "description":"Giving your Work-I mean residents housing increases their productivity and your own morale.",
-	 "buycap":75,
-	 "purchased":0,
-	 "buylimitmsg":"Your buildings have been stacked so high their reaching their clouds.(buy limit reached)"
-  },
-  {
-	 "upgrade":"Land Expansion",
-	 "cost":10000,
-	 "ClickIncrease":0,
-	 "PerSecIncrease":10,
-	 "description":"More land for your empire.",
-	 "buycap":75,
-	 "purchased":0,
-	 "buylimitmsg":"You are quickly running out of space to reclaim,and can no longer expand your country.(buy limit reached)"
-  },
-  {
-	 "upgrade":"Commercial Seafare",
-	 "cost":50000,
-	 "ClickIncrease":0,
-	 "PerSecIncrease":30,
-	 "description":"Which billionare doesn't like private sea carriage?",
-	 "buycap":100,
-	 "purchased":0,
-	 "buylimitmsg":"All sea shipments now require your boats.(buy limit reached)"
-  }
+  	},
+  	{
+		 "upgrade":"Long Term Investments",
+		 "cost":1000,
+		 "ClickIncrease":0,
+		 "PerSecIncrease":3,
+		 "description":"Who knew stocks made passive income?",
+		 "buycap":300,
+		 "purchased":0,
+		 "multiplier": 1.15,
+		 "buylimitmsg":"All companies rely on your shares to obtain funding.(buy limit reached)"
+  	},
+  	{
+		 "upgrade":"Housing Development Board",
+		 "cost":10000,
+		 "ClickIncrease":5,
+		 "PerSecIncrease":5,
+		 "description":"Giving your Work-I mean residents housing increases their productivity and your own morale.",
+		 "buycap":75,
+		 "purchased":0,
+		 "multiplier": 1.15,
+		 "buylimitmsg":"Your buildings have been stacked so high their reaching their clouds.(buy limit reached)"
+  	},
+  	{
+		 "upgrade":"Land Expansion",
+		 "cost":10000,
+		 "ClickIncrease":0,
+		 "PerSecIncrease":10,
+		 "description":"More land for your empire.",
+		 "buycap":75,
+		 "purchased":0,
+		 "multiplier": 1.15,
+		 "buylimitmsg":"You are quickly running out of space to reclaim,and can no longer expand your country.(buy limit reached)"
+  	},
+  	{
+		 "upgrade":"Commercial Seafare",
+		 "cost":50000,
+		 "ClickIncrease":0,
+		 "PerSecIncrease":30,
+		 "description":"Which billionare doesn't like private sea carriage?",
+		 "buycap":100,
+		 "purchased":0,
+		  "multiplier": 1.15,
+		 "buylimitmsg":"All sea shipments now require your boats.(buy limit reached)"
+  	},
+  	{
+		 "upgrade":"Crypto Mining Software",
+		 "cost":500000,
+		 "ClickIncrease":0,
+		 "PerSecIncrease":400,
+		 "description": "Deploy state-of-the-art algorithmic scripts to optimize your rigs.",
+		 "buycap":50,
+		 "purchased":0,
+		  "multiplier": 1.15,
+		 "buylimitmsg":"You ran out of RAM. (buy limit reached)"
+	},
+	{
+		 "upgrade":"Hacking Powers",
+		 "cost":3000000,
+		 "ClickIncrease":100,
+		 "PerSecIncrease":100,
+		 "description": "Hack this game to earn money",
+		 "buycap":50,
+		 "purchased":0,
+		  "multiplier": 1.15,
+		 "buylimitmsg":"You got caught hacking. (buy limit reached)"
+	},
+	{
+		 "upgrade":"I am a Parallelogram",
+		 "cost":100000000,
+		 "ClickIncrease":0,
+		 "PerSecIncrease":0,
+		 "description": "Parallelograms spawn randomly and you get extra money from clicking them",
+		 "buycap":1,
+		 "purchased":0,
+		  "multiplier": 1.15,
+		 "buylimitmsg":"You already bought this upgrade"
+	},
+	{
+		 "upgrade":"Learn to code",
+		 "cost":5000000000,
+		 "ClickIncrease":0,
+		 "PerSecIncrease":0,
+		 "description": "Allows you to open a coding box and code money giving software",
+		 "buycap":1,
+		 "purchased":0,
+		  "multiplier": 1.15,
+		 "buylimitmsg":"You already bought this upgrade"
+	},
+	{
+		 "upgrade":"Buy Microsoft",
+		 "cost":3960000000000,
+		 "ClickIncrease":0,
+		 "PerSecIncrease":1000000000000,
+		 "description": "Copilot for everyone!!!",
+		 "buycap":10,
+		 "purchased":0,
+		  "multiplier": 1.15,
+		 "buylimitmsg":"You got sued for cheating your workers. "
+	}
 ]
-
-
