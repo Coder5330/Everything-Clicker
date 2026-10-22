@@ -6,16 +6,20 @@ const upgradesContainer = document.getElementById("upgrade-area");
 
 const BOOST_MULTIPLIER = 7;
 const BOOST_DURATION = 60;
+const SPAWN_MIN = 30;
+const SPAWN_MAX = 90;
+const PARALLELOGRAM_SIZE = 80;
+const PARALLELOGRAM_LIFETIME = 8000;
 
 let count = 0;
 let inc = 1;
 let autoadd = 0;
 let data = [];
-let timer = randint(300, 900);
+let timer = randint(SPAWN_MIN, SPAWN_MAX);
 let boost = false;
 let boostTimer = BOOST_DURATION;
 let parallelograms = [];
-let parallelogramsOn = false;
+let parallelogramsOn = true;
 
 const parallelogramImage = new Image();
 parallelogramImage.src = "parallelogram.png";
@@ -87,13 +91,48 @@ function recalcStats() {
 	}
 }
 
-function updateBoost() {
-	if (!parallelogramsOn) return;
+function activateBoost() {
+	boost = true;
+	boostTimer = BOOST_DURATION;
+	render();
+}
 
-	timer--;
-	if (timer <= 0) {
-		timer = randint(300, 900);
-		boost = true;
+function removeParallelogram(el) {
+	const index = parallelograms.indexOf(el);
+	if (index !== -1) parallelograms.splice(index, 1);
+	el.remove();
+}
+
+function spawnParallelogram() {
+	const el = parallelogramImage.cloneNode();
+	el.alt = "Click for boost";
+	el.draggable = false;
+	el.style.position = "fixed";
+	el.style.width = PARALLELOGRAM_SIZE + "px";
+	el.style.left = randint(0, Math.max(0, window.innerWidth - PARALLELOGRAM_SIZE)) + "px";
+	el.style.top = randint(0, Math.max(0, window.innerHeight - PARALLELOGRAM_SIZE)) + "px";
+	el.style.cursor = "pointer";
+	el.style.zIndex = "1000";
+	el.style.userSelect = "none";
+
+	el.addEventListener("click", () => {
+		activateBoost();
+		removeParallelogram(el);
+	});
+
+	document.body.appendChild(el);
+	parallelograms.push(el);
+
+	setTimeout(() => removeParallelogram(el), PARALLELOGRAM_LIFETIME);
+}
+
+function updateBoost() {
+	if (parallelogramsOn) {
+		timer--;
+		if (timer <= 0) {
+			timer = randint(SPAWN_MIN, SPAWN_MAX);
+			spawnParallelogram();
+		}
 	}
 
 	if (boost) {
@@ -101,6 +140,7 @@ function updateBoost() {
 		if (boostTimer <= 0) {
 			boost = false;
 			boostTimer = BOOST_DURATION;
+			render();
 		}
 	}
 }
