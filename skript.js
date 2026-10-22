@@ -7,7 +7,7 @@ const upgradesContainer = document.getElementById("upgrade-area");
 const BOOST_MULTIPLIER = 7;
 const BOOST_DURATION = 60;
 
-let count = 0;
+let count = 0; 
 let inc = 1;
 let autoadd = 0;
 let data = [];
