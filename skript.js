@@ -1,3 +1,4 @@
+(() => {
 const btn = document.getElementById("click-btn");
 const countText = document.getElementById("count");
 const clickText = document.getElementById("click-str");
@@ -640,3 +641,4 @@ setInterval(update, 1000);
 runGame();
 pulseGlow();
 requestAnimationFrame(gameLoop);
+})();
