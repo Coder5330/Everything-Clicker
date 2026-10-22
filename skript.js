@@ -55,7 +55,7 @@ function pulseGlow() {
 	    intensity -= 1;
 	    if (intensity <= 30) growing = true;
 	}
-	  
+
 	glowContainer.style.boxShadow = `
 		inset 0 0 ${intensity * 2}px rgba(255, 225, 60, 0.75),
 		inset 0 0 ${intensity * 4}px rgba(255, 190, 0, 0.35),
@@ -184,7 +184,7 @@ function refreshUpgradeButtons() {
 			disabled = true;
 		} else {
 			const price = currentCost(item);
-			text = "Cost:$" + price.toLocaleString()
+			text = "Cost:$" + formatter.format(price.toLocaleString())
 				+ " (" + item.purchased + "/" + item.buycap + ")";
 			disabled = count < price;
 		}
