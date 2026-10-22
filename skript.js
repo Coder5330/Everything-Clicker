@@ -14,7 +14,7 @@ const PARALLELOGRAM_LIFETIME = 8000;
 
 const formatter = new Intl.NumberFormat('en-US', {
 	notation: 'compact',
-	compactDisplay: 'long'
+	compactDisplay: 'short'
 });
 
 let intensity = 40;
