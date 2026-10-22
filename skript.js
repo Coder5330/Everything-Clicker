@@ -239,11 +239,6 @@ function addMoney(amount) {
 	render();
 }
 
-function render() {
-	txt1.textContent = "$"+ count;
-	txt2.textContent = inc;
-	txt3.textContent = autoadd;
-	rebirth_render();
 function update() {
 	updateBoost();
 }
@@ -325,6 +320,7 @@ function render() {
 	clickText.textContent = formatter.format(inc * boostMultiplier);
 	autoText.textContent = formatter.format(autoadd * boostMultiplier);
 	refreshUpgradeButtons();
+	rebirth_render();
 }
 
 async function runGame() {
