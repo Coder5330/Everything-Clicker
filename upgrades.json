@@ -1,12 +1,13 @@
 [
   {
-    	"upgrade": "Basic capitalisation",
+    	"upgrade": "Newbie Capitalism",
     	"cost": 10,
     	"ClickIncrease": 1,
 	"PerSecIncrease": 0,
     	"description":"The first step to owning everything.",
     	"buycap":50,
     	"purchased":0,
+	  	"multiplier": 1.2,
     	"buylimitmsg":"You are now in the top 0.01% of richness, basic plans no longer interests you.(buy limit reached)"
   },
   {
@@ -17,6 +18,7 @@
     	"description":"Hey, if it works it works man. They signed the Terms and Conditons for free housing.",
     	"buycap":100,
     	"purchased":0,
+	  	"multiplier": 1.2,
     	"buylimitmsg":"you ran out of space in your capitalist state.(buy limit reached)"
   },
   {
@@ -27,6 +29,7 @@
 	 "description":"Who knew stocks made passive income?",
 	 "buycap":300,
 	 "purchased":0,
+	 "multiplier": 1.2,
 	 "buylimitmsg":"All companies rely on your shares to obtain funding.(buy limit reached)"
   },
   {
@@ -37,6 +40,7 @@
 	 "description":"Giving your Work-I mean residents housing increases their productivity and your own morale.",
 	 "buycap":75,
 	 "purchased":0,
+	 "multiplier": 1.2,
 	 "buylimitmsg":"Your buildings have been stacked so high their reaching their clouds.(buy limit reached)"
   },
   {
@@ -47,6 +51,7 @@
 	 "description":"More land for your empire.",
 	 "buycap":75,
 	 "purchased":0,
+	 "multiplier": 1.2,
 	 "buylimitmsg":"You are quickly running out of space to reclaim,and can no longer expand your country.(buy limit reached)"
   },
   {
@@ -57,6 +62,7 @@
 	 "description":"Which billionare doesn't like private sea carriage?",
 	 "buycap":100,
 	 "purchased":0,
+	  "multiplier": 1.2,
 	 "buylimitmsg":"All sea shipments now require your boats.(buy limit reached)"
   }
 ]
