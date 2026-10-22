@@ -41,17 +41,17 @@ function currentCost(item) {
 
 
 function pulseGlow() {
-  if (growing) {
-    intensity += 1;
-    if (intensity >= 80) growing = false;
-  } else {
-    intensity -= 1;
-    if (intensity <= 30) growing = true;
-  }
-  
-  glowContainer.style.boxShadow = `inset 0 0 ${intensity * 2}px rgba(0, 255, 204, 0.5), 0 0 ${intensity * 3}px rgba(0, 255, 204, 0.4)`;
-  
-  requestAnimationFrame(pulseGlow);
+	if (growing) {
+	    intensity += 1;
+	    if (intensity >= 80) growing = false;
+	} else {
+	    intensity -= 1;
+	    if (intensity <= 30) growing = true;
+	}
+	  
+	glowContainer.style.boxShadow = `inset 0 0 ${intensity * 2}px rgba(255, 200, 40, 0.5), 0 0 ${intensity * 3}px rgba(255, 200, 40, 0.4)`;
+	  
+	requestAnimationFrame(pulseGlow);
 }
 
 async function loadGameData() {
