@@ -1,16 +1,28 @@
+(() => {
 const btn = document.getElementById("click-btn");
 const countText = document.getElementById("count");
 const clickText = document.getElementById("click-str");
 const autoText = document.getElementById("auto-str");
 const upgradesContainer = document.getElementById("upgrade-area");
+const rebirth_area = document.getElementById("rebirth");
+let rebirth_btn = null;
+let cheated = false;
 const glowContainer = document.getElementById('screen-glow');
 
 const BOOST_MULTIPLIER = 7;
 const BOOST_DURATION = 60;
-const SPAWN_MIN = 30;
-const SPAWN_MAX = 90;
+const SPAWN_MIN = 300;
+const SPAWN_MAX = 900;
 const PARALLELOGRAM_SIZE = 80;
 const PARALLELOGRAM_LIFETIME = 8000;
+const RAIN_FONT_SIZE = 16;
+const CRYPTO_UPGRADE_NAME = "Crypto Mining Software";
+const PARALLELOGRAM_UPGRADE_NAME = "I am a Parallelogram";
+
+// ---- anti-cheat config ----
+const SALT = "x9#kQ-parallelogram-7f2";
+const MAX_CPS = 25; // humanly plausible clicks per second
+
 const suffix = [
   "K", "M", "B", "T", "Qa", "Qi", "Sx", "Sp", "Oc", "No", 
   "Dc", "UDc", "DDc", "TDc", "QaDc", "QiDc", "SxDc", "SpDc", "OcDc", "NoDc", 
@@ -33,14 +45,114 @@ let autoadd = 0;
 let data = [];
 let timer = randint(SPAWN_MIN, SPAWN_MAX);
 let boost = false;
-let boostTimer = BOOST_DURATION;
+let boostEnd = 0;
 let parallelograms = [];
-let parallelogramsOn = true;
+let parallelogramsOn = false;
 let lastFrame = performance.now();
 let lastSave = 0;
 
+// anti-cheat state
+let trustedCount = 0;
+let trustedPurchasedTotal = 0;
+let clickTimes = [];
+
 const parallelogramImage = new Image();
 parallelogramImage.src = "parallelogram.png";
+
+const buffArea = document.createElement("div");
+buffArea.id = "buff-area";
+document.body.appendChild(buffArea);
+
+let boostChip = null;
+let boostTimeEl = null;
+let boostBarEl = null;
+
+const rainCanvas = document.createElement("canvas");
+rainCanvas.id = "crypto-rain";
+document.body.appendChild(rainCanvas);
+const rainCtx = rainCanvas.getContext("2d");
+
+let rainDrops = [];
+let rainLastRow = [];
+let rainWasActive = false;
+
+// ================= anti-cheat =================
+
+function hash(str) { // cyrb53, a fast non-crypto hash
+	let h1 = 0xdeadbeef, h2 = 0x41c6ce57;
+	for (let i = 0; i < str.length; i++) {
+		const ch = str.charCodeAt(i);
+		h1 = Math.imul(h1 ^ ch, 2654435761);
+		h2 = Math.imul(h2 ^ ch, 1597334677);
+	}
+	h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+	h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+	return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(36);
+}
+
+function sign(countVal, purchasedJSON) {
+	return hash(Math.floor(countVal) + "|" + purchasedJSON + "|" + SALT);
+}
+
+function purchasedMap() {
+	const map = {};
+	for (const item of data) map[item.upgrade] = item.purchased || 0;
+	return map;
+}
+
+function purchasedTotal() {
+	return data.reduce((s, i) => s + (i.purchased || 0), 0);
+}
+
+// call after every legitimate change to count or purchases
+function commit() {
+	trustedCount = count;
+	trustedPurchasedTotal = purchasedTotal();
+}
+
+function flagCheat(reason) {
+	if (cheated) return;
+	cheated = true;
+	console.warn("Cheat detected:", reason);
+	localStorage.setItem("cheater", "1");
+
+	// punish: wipe progress
+	count = 0;
+	for (const item of data) item.purchased = 0;
+	localStorage.removeItem("gameCount");
+	localStorage.removeItem("purchased");
+	localStorage.removeItem("sig");
+	recalcStats();
+	commit();
+
+	const banner = document.createElement("div");
+	banner.textContent = "Cheating detected. Your progress has been reset.";
+	banner.style.cssText =
+		"position:fixed;top:0;left:0;right:0;padding:12px;background:#b00020;" +
+		"color:#fff;text-align:center;z-index:99999;font-weight:bold";
+	document.body.appendChild(banner);
+}
+
+function checkIntegrity() {
+	if (cheated || !data.length) return;
+	const drift = Math.abs(count - trustedCount);
+	if (drift > Math.max(1e-6 * Math.abs(trustedCount), 1e-6)) {
+		flagCheat("count modified outside game logic");
+	} else if (purchasedTotal() !== trustedPurchasedTotal) {
+		flagCheat("upgrades modified outside game logic");
+	}
+}
+
+function registerClick(event) {
+	if (!event.isTrusted) return flagCheat("synthetic click"), false;
+	const now = performance.now();
+	clickTimes.push(now);
+	clickTimes = clickTimes.filter(t => now - t < 1000);
+	if (clickTimes.length > MAX_CPS) return flagCheat("autoclicker"), false;
+	return true;
+}
+
+// ================= game =================
 
 function format(n) {
 	n = Number(n);
@@ -83,14 +195,13 @@ function currentCost(item) {
 	return Math.floor(item.cost * Math.pow(item.multiplier || 1, item.purchased));
 }
 
-
 function pulseGlow() {
 	if (growing) {
-	    intensity += 1;
-	    if (intensity >= 80) growing = false;
+		intensity += 1;
+		if (intensity >= 80) growing = false;
 	} else {
-	    intensity -= 1;
-	    if (intensity <= 30) growing = true;
+		intensity -= 1;
+		if (intensity <= 30) growing = true;
 	}
 
 	glowContainer.style.boxShadow = `
@@ -98,7 +209,7 @@ function pulseGlow() {
 		inset 0 0 ${intensity * 4}px rgba(255, 190, 0, 0.35),
 		0 0 ${intensity * 3}px rgba(255, 215, 0, 0.6)
 	`;
-	  
+
 	requestAnimationFrame(pulseGlow);
 }
 
@@ -113,15 +224,13 @@ async function loadGameData() {
 }
 
 function saveCount() {
+	if (!data.length) return; // don't write a signature before data is loaded
 	localStorage.setItem('gameCount', count);
+	localStorage.setItem('sig', sign(count, JSON.stringify(purchasedMap())));
 }
 
 function saveProgress() {
-	const purchased = {};
-	for (const item of data) {
-		purchased[item.upgrade] = item.purchased;
-	}
-	localStorage.setItem('purchased', JSON.stringify(purchased));
+	localStorage.setItem('purchased', JSON.stringify(purchasedMap()));
 	saveCount();
 }
 
@@ -155,24 +264,94 @@ function recalcStats() {
 		inc += item.purchased * (item.ClickIncrease || 0);
 		autoadd += item.purchased * (item.PerSecIncrease || 0);
 	}
+	const para = data.find(i => i.upgrade === PARALLELOGRAM_UPGRADE_NAME);
+	parallelogramsOn = !!para && para.purchased > 0;
+}
+
+function showBoostChip() {
+	if (boostChip) return;
+	boostChip = document.createElement("div");
+	boostChip.className = "buff-chip";
+
+	const name = document.createElement("span");
+	name.className = "buff-name";
+	name.textContent = "x" + BOOST_MULTIPLIER + " Boost";
+
+	boostTimeEl = document.createElement("span");
+	boostTimeEl.className = "buff-time";
+
+	boostBarEl = document.createElement("div");
+	boostBarEl.className = "buff-bar";
+
+	boostChip.append(name, boostTimeEl, boostBarEl);
+	buffArea.appendChild(boostChip);
+}
+
+function hideBoostChip() {
+	if (!boostChip) return;
+	boostChip.remove();
+	boostChip = null;
+	boostTimeEl = null;
+	boostBarEl = null;
+}
+
+function updateBuffs(now) {
+	if (boost && now >= boostEnd) {
+		boost = false;
+		hideBoostChip();
+		return;
+	}
+	if (!boost) return;
+
+	const remainingMs = boostEnd - now;
+	const secs = Math.ceil(remainingMs / 1000);
+	boostTimeEl.textContent = Math.floor(secs / 60) + ":" + String(secs % 60).padStart(2, "0");
+	boostBarEl.style.transform = "scaleX(" + (remainingMs / (BOOST_DURATION * 1000)) + ")";
+	boostChip.classList.toggle("ending", secs <= 10);
 }
 
 function activateBoost() {
 	boost = true;
-	boostTimer = BOOST_DURATION;
-	render();
+	boostEnd = performance.now() + BOOST_DURATION * 1000;
+	showBoostChip();
 }
 
-function removeParallelogram(el) {
+function removeParallelogram(el, animClass) {
 	const index = parallelograms.indexOf(el);
-	if (index !== -1) parallelograms.splice(index, 1);
-	el.remove();
+	if (index === -1) return;
+	parallelograms.splice(index, 1);
+
+	el.style.pointerEvents = "none";
+	if (animClass) {
+		el.classList.remove("para-expiring");
+		el.classList.add(animClass);
+		setTimeout(() => el.remove(), 500);
+	} else {
+		el.remove();
+	}
+}
+
+function burstSparkles(x, y) {
+	const sparkCount = 12;
+	for (let i = 0; i < sparkCount; i++) {
+		const spark = document.createElement("div");
+		spark.className = "para-spark";
+		const angle = (i / sparkCount) * Math.PI * 2;
+		const dist = randint(50, 110);
+		spark.style.left = x + "px";
+		spark.style.top = y + "px";
+		spark.style.setProperty("--dx", Math.cos(angle) * dist + "px");
+		spark.style.setProperty("--dy", Math.sin(angle) * dist + "px");
+		document.body.appendChild(spark);
+		setTimeout(() => spark.remove(), 650);
+	}
 }
 
 function spawnParallelogram() {
 	const el = parallelogramImage.cloneNode();
 	el.alt = "Click for boost";
 	el.draggable = false;
+	el.className = "para";
 	el.style.position = "fixed";
 	el.style.width = PARALLELOGRAM_SIZE + "px";
 	el.style.left = randint(0, Math.max(0, window.innerWidth - PARALLELOGRAM_SIZE)) + "px";
@@ -181,15 +360,20 @@ function spawnParallelogram() {
 	el.style.zIndex = "1000";
 	el.style.userSelect = "none";
 
-	el.addEventListener("click", () => {
+	el.addEventListener("click", (e) => {
+		if (!e.isTrusted) return flagCheat("synthetic boost click");
+		if (!parallelograms.includes(el)) return;
+		const rect = el.getBoundingClientRect();
+		burstSparkles(rect.left + rect.width / 2, rect.top + rect.height / 2);
 		activateBoost();
-		removeParallelogram(el);
+		removeParallelogram(el, "para-pop");
 	});
 
 	document.body.appendChild(el);
 	parallelograms.push(el);
 
-	setTimeout(() => removeParallelogram(el), PARALLELOGRAM_LIFETIME);
+	setTimeout(() => el.classList.add("para-expiring"), PARALLELOGRAM_LIFETIME - 2000);
+	setTimeout(() => removeParallelogram(el, "para-fade"), PARALLELOGRAM_LIFETIME - 500);
 }
 
 function updateBoost() {
@@ -200,13 +384,64 @@ function updateBoost() {
 			spawnParallelogram();
 		}
 	}
+}
 
-	if (boost) {
-		boostTimer--;
-		if (boostTimer <= 0) {
-			boost = false;
-			boostTimer = BOOST_DURATION;
-			render();
+function resizeRain() {
+	rainCanvas.width = window.innerWidth;
+	rainCanvas.height = window.innerHeight;
+	const columns = Math.floor(rainCanvas.width / RAIN_FONT_SIZE);
+	rainDrops = Array.from({ length: columns }, () => Math.random() * -40);
+	rainLastRow = new Array(columns).fill(-1);
+}
+
+function getCryptoLevel() {
+	if (!Array.isArray(data)) return 0;
+	const item = data.find(i => i.upgrade === CRYPTO_UPGRADE_NAME);
+	return item ? item.purchased / item.buycap : 0;
+}
+
+function drawRain(dt) {
+	const level = getCryptoLevel();
+
+	if (level <= 0) {
+		if (rainWasActive) {
+			rainCtx.clearRect(0, 0, rainCanvas.width, rainCanvas.height);
+			rainWasActive = false;
+		}
+		return;
+	}
+	rainWasActive = true;
+
+	rainCtx.globalCompositeOperation = "destination-out";
+	rainCtx.fillStyle = "rgba(0, 0, 0, 0.12)";
+	rainCtx.fillRect(0, 0, rainCanvas.width, rainCanvas.height);
+	rainCtx.globalCompositeOperation = "source-over";
+
+	rainCtx.font = RAIN_FONT_SIZE + "px monospace";
+
+	const density = 0.1 + level * 0.9;
+	const speed = (6 + level * 22) * Math.min(dt, 0.1);
+
+	for (let i = 0; i < rainDrops.length; i++) {
+		if (((i * 7919) % 100) / 100 > density) continue;
+
+		rainDrops[i] += speed * (0.6 + ((i * 31) % 10) / 12);
+		const row = Math.floor(rainDrops[i]);
+
+		if (row >= 0 && row !== rainLastRow[i]) {
+			rainLastRow[i] = row;
+			const x = i * RAIN_FONT_SIZE;
+			const y = row * RAIN_FONT_SIZE;
+
+			rainCtx.fillStyle = "#d8ffe0";
+			rainCtx.fillText(Math.random() < 0.5 ? "0" : "1", x, y);
+			rainCtx.fillStyle = "#00ff55";
+			rainCtx.fillText(Math.random() < 0.5 ? "0" : "1", x, y - RAIN_FONT_SIZE);
+		}
+
+		if (row * RAIN_FONT_SIZE > rainCanvas.height && Math.random() > 0.96) {
+			rainDrops[i] = Math.random() * -20;
+			rainLastRow[i] = -1;
 		}
 	}
 }
@@ -233,6 +468,7 @@ function refreshUpgradeButtons() {
 
 function addMoney(amount) {
 	count += amount * getBoostMultiplier();
+	commit();
 	saveCount();
 	render();
 }
@@ -245,17 +481,19 @@ function gameLoop(now) {
 	const dt = (now - lastFrame) / 1000;
 	lastFrame = now;
 
+	checkIntegrity();
+
+	updateBuffs(now);
+
 	if (autoadd > 0) {
-		count += autoadd * getBoostMultiplier() * dt;
+		count += autoadd * getBoostMultiplier() * Math.min(dt, 1); // cap dt for tab throttling
+		commit();
 	}
 
+	drawRain(dt);
 	render();
-	
-	if (boost) {
-		glowContainer.style.display = "block";
-	} else {
-		glowContainer.style.display = "none";
-	}
+
+	glowContainer.style.display = boost ? "block" : "none";
 
 	if (now - lastSave > 1000) {
 		saveCount();
@@ -266,6 +504,7 @@ function gameLoop(now) {
 }
 
 function upgrade(i) {
+	if (cheated) return;
 	const item = data[i];
 	const price = currentCost(item);
 
@@ -280,6 +519,7 @@ function upgrade(i) {
 
 	count -= price;
 	item.purchased++;
+	commit();
 
 	saveProgress();
 	recalcStats();
@@ -317,12 +557,16 @@ function render() {
 	countText.textContent = "$" + formatter.format(Math.floor(count));
 	clickText.textContent = formatter.format(inc * boostMultiplier);
 	autoText.textContent = formatter.format(autoadd * boostMultiplier);
+	clickText.classList.toggle("boosted", boost);
+	autoText.classList.toggle("boosted", boost);
 	refreshUpgradeButtons();
+	rebirth_render();
 }
 
 async function runGame() {
-	data = await loadGameData();
-	if (!data) return;
+	const loaded = await loadGameData();
+	if (!loaded) return;
+	data = loaded;
 
 	count = loadCount();
 
@@ -331,17 +575,60 @@ async function runGame() {
 		item.purchased = purchased[item.upgrade] || 0;
 	}
 
+	// verify save signature (old unsigned saves are accepted once, then signed)
+	const sig = localStorage.getItem('sig');
+	const hasSave = localStorage.getItem('gameCount') !== null;
+	const tampered =
+		localStorage.getItem("cheater") === "1" ||
+		(hasSave && sig && sig !== sign(count, JSON.stringify(purchasedMap())));
+
 	localStorage.removeItem('gamedata');
 	localStorage.removeItem('gameDataHasCached');
 
-	saveProgress();
 	recalcStats();
+	commit();
+	if (tampered) flagCheat("save file tampered");
+
+	saveProgress();
 	makeUpgradeButtons();
 	render();
 }
 
-btn.addEventListener("click", () => addMoney(inc));
+function rebirth_render() {
+	if (!rebirth_btn) {
+		rebirth_btn = document.createElement("button");
+		rebirth_btn.textContent = "Rebirth";
+		rebirth_btn.title = "Would you like to rebirth?";
+		rebirth_btn.classList.add("rebirth-btn");
+		rebirth_btn.addEventListener("click", rebirth_logic);
+		rebirth_area.appendChild(rebirth_btn);
+		void rebirth_btn.offsetWidth;
+	}
+
+	const canRebirth = !cheated && count >= 1e10;
+	rebirth_btn.classList.toggle("visible", canRebirth);
+	rebirth_btn.disabled = !canRebirth;
+}
+
+function rebirth_logic(event) {
+	if (cheated) return;
+	if (count >= 1e10) {
+		window.location.href = "i.html";
+	}
+}
+
+// cheat() removed: everything is inside an IIFE, so nothing is reachable from the console.
+
+window.addEventListener("resize", resizeRain);
+resizeRain();
+
+btn.addEventListener("click", (e) => {
+	if (!data.length) return; // game data not loaded yet
+	if (!registerClick(e)) return;
+	addMoney(inc);
+});
 setInterval(update, 1000);
 runGame();
 pulseGlow();
 requestAnimationFrame(gameLoop);
+})();
