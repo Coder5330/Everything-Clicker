@@ -11,11 +11,19 @@ const SPAWN_MIN = 30;
 const SPAWN_MAX = 90;
 const PARALLELOGRAM_SIZE = 80;
 const PARALLELOGRAM_LIFETIME = 8000;
-
-const formatter = new Intl.NumberFormat('en-US', {
-	notation: 'scientific',
-	compactDisplay: 'short'
-});
+const suffix = [
+  "K", "M", "B", "T", "Qa", "Qi", "Sx", "Sp", "Oc", "No", 
+  "Dc", "UDc", "DDc", "TDc", "QaDc", "QiDc", "SxDc", "SpDc", "OcDc", "NoDc", 
+  "Vg", "UVg", "DVg", "TVg", "QaVg", "QiVg", "SxVg", "SpVg", "OcVg", "NoVg", 
+  "Tg", "UTg", "DTg", "TTg", "QaTg", "QiTg", "SxTg", "SpTg", "OcTg", "NoTg", 
+  "Qd", "UQd", "DQd", "TQd", "QaQd", "QiQd", "SxQd", "SpQd", "OcQd", "NoQd", 
+  "Qn", "UQn", "DQn", "TQn", "QaQn", "QiQn", "SxQn", "SpQn", "OcQn", "NoQn", 
+  "SxG", "USxG", "DSxG", "TSxG", "QaSxG", "QiSxG", "SxSxG", "SpSxG", "OcSxG", "NoSxG", 
+  "SpG", "USpG", "DSpG", "TSpG", "QaSpG", "QiSpG", "SxSpG", "SpSpG", "OcSpG", "NoSpG", 
+  "Og", "UOg", "DOg", "TOg", "QaOg", "QiOg", "SxOg", "SpOg", "OcOg", "NoOg", 
+  "Nn", "UNn", "DNn", "TNn", "QaNn", "QiNn", "SxNn", "SpNn", "OcNn", "NoNn", 
+  "Ct"
+];
 
 let intensity = 40;
 let growing = true;
@@ -33,6 +41,35 @@ let lastSave = 0;
 
 const parallelogramImage = new Image();
 parallelogramImage.src = "parallelogram.png";
+
+function format(n) {
+	n = Number(n);
+	if (!Number.isFinite(n)) return n > 0 ? "∞" : "0";
+	if (n < 0) return "-" + format(-n);
+
+	if (n < 1000) {
+		return Number.isInteger(n) ? String(n) : String(parseFloat(n.toFixed(2)));
+	}
+
+	let tier = Math.floor(Math.log10(n) / 3);
+	tier = Math.min(tier, suffix.length);
+
+	let scaled = n / Math.pow(10, tier * 3);
+
+	if (scaled >= 1000 && tier < suffix.length) {
+		tier++;
+		scaled = n / Math.pow(10, tier * 3);
+	} else if (scaled < 1) {
+		tier--;
+		scaled = n / Math.pow(10, tier * 3);
+	}
+
+	const truncated = Math.floor(scaled * 100) / 100;
+
+	return parseFloat(truncated.toFixed(2)) + suffix[tier - 1];
+}
+
+const formatter = { format };
 
 function randint(min, max) {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
