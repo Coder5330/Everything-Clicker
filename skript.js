@@ -3,6 +3,8 @@ const countText = document.getElementById("count");
 const clickText = document.getElementById("click-str");
 const autoText = document.getElementById("auto-str");
 const upgradesContainer = document.getElementById("upgrade-area");
+const rebirth_area = document.getElementById("rebirth");
+let rebirth_btn = null;
 const glowContainer = document.getElementById('screen-glow');
 
 const BOOST_MULTIPLIER = 7;
@@ -237,6 +239,11 @@ function addMoney(amount) {
 	render();
 }
 
+function render() {
+	txt1.textContent = "$"+ count;
+	txt2.textContent = inc;
+	txt3.textContent = autoadd;
+	rebirth_render();
 function update() {
 	updateBoost();
 }
@@ -338,6 +345,28 @@ async function runGame() {
 	recalcStats();
 	makeUpgradeButtons();
 	render();
+}
+
+function rebirth_render() {
+	if (!rebirth_btn) {
+		rebirth_btn = document.createElement("button");
+		rebirth_btn.textContent = "Rebirth";
+		rebirth_btn.title = "Would you like to rebirth?";
+		rebirth_btn.classList.add("rebirth-btn");
+		rebirth_btn.addEventListener("click", rebirth_logic);
+		rebirth_area.appendChild(rebirth_btn);
+		void rebirth_btn.offsetWidth;
+	}
+
+	const canRebirth = count >= 1e10;
+	rebirth_btn.classList.toggle("visible", canRebirth);
+	rebirth_btn.disabled = !canRebirth;
+}
+
+function rebirth_logic(event) {
+	if(count >= 1e10) {
+		window.location.href = "i.html";
+	}
 }
 
 btn.addEventListener("click", () => addMoney(inc));
