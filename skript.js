@@ -1,4 +1,3 @@
-(() => {
 const btn = document.getElementById("click-btn");
 const countText = document.getElementById("count");
 const clickText = document.getElementById("click-str");
@@ -565,7 +564,6 @@ function render() {
 	autoText.textContent = formatter.format(autoadd * boostMultiplier);
 	clickText.classList.toggle("boosted", boost);
 	autoText.classList.toggle("boosted", boost);
-	export {rebirthed};
 	refreshUpgradeButtons();
 	rebirth_render();
 }
@@ -576,6 +574,7 @@ async function runGame() {
 	data = loaded;
 
 	count = loadCount();
+	count = 1e19
 	rebirthed = localStorage.getItem('rebirthed') === "1";
 
 	const purchased = loadPurchased();
@@ -642,4 +641,3 @@ setInterval(update, 1000);
 runGame();
 pulseGlow();
 requestAnimationFrame(gameLoop);
-})();
