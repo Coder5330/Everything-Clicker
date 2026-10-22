@@ -1,16 +1,16 @@
 [
-  {
+	{
     	"upgrade": "Newbie Capitalism",
     	"cost": 10,
     	"ClickIncrease": 1,
-	"PerSecIncrease": 0,
+		"PerSecIncrease": 0,
     	"description":"The first step to owning everything.",
     	"buycap":50,
     	"purchased":0,
 	  	"multiplier": 1.2,
     	"buylimitmsg":"You are now in the top 0.01% of richness, basic plans no longer interests you.(buy limit reached)"
-  },
-  {
+	},
+	{
     	"upgrade": "Willing Slave-I mean residents",
     	"cost": 50,
     	"ClickIncrease": 0,
@@ -20,8 +20,8 @@
     	"purchased":0,
 	  	"multiplier": 1.2,
     	"buylimitmsg":"you ran out of space in your capitalist state.(buy limit reached)"
-  },
-  {
+  	},
+  	{
 	 "upgrade":"Long Term Investments",
 	 "cost":1000,
 	 "ClickIncrease":0,
@@ -31,8 +31,8 @@
 	 "purchased":0,
 	 "multiplier": 1.2,
 	 "buylimitmsg":"All companies rely on your shares to obtain funding.(buy limit reached)"
-  },
-  {
+  	},
+  	{
 	 "upgrade":"Housing Development Board",
 	 "cost":10000,
 	 "ClickIncrease":5,
@@ -42,8 +42,8 @@
 	 "purchased":0,
 	 "multiplier": 1.2,
 	 "buylimitmsg":"Your buildings have been stacked so high their reaching their clouds.(buy limit reached)"
-  },
-  {
+  	},
+  	{
 	 "upgrade":"Land Expansion",
 	 "cost":10000,
 	 "ClickIncrease":0,
@@ -53,8 +53,8 @@
 	 "purchased":0,
 	 "multiplier": 1.2,
 	 "buylimitmsg":"You are quickly running out of space to reclaim,and can no longer expand your country.(buy limit reached)"
-  },
-  {
+  	},
+  	{
 	 "upgrade":"Commercial Seafare",
 	 "cost":50000,
 	 "ClickIncrease":0,
@@ -64,8 +64,8 @@
 	 "purchased":0,
 	  "multiplier": 1.2,
 	 "buylimitmsg":"All sea shipments now require your boats.(buy limit reached)"
-  },
-  {
+  	},
+  	{
 	 "upgrade":"Crypto mining Software",
 	 "cost":500000,
 	 "ClickIncrease":0,
@@ -75,7 +75,7 @@
 	 "purchased":0,
 	  "multiplier": 1.2,
 	 "buylimitmsg":"You ran out of RAM. (buy limit reached)"
-  }
+	},
 ]
 
 
