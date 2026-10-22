@@ -108,12 +108,6 @@ const fs = {
             }
         }
     },
-    root: {
-        "welcome.txt": "Welcome, admin.\nYou have reached level 2.\nThe vault holds the next clue. Look around.",
-        vault: {
-            "clue.txt": "Level 2 clue goes here. Replace this text with your next puzzle."
-        }
-    },
     etc: {
         "hostname": "fakebash"
     }
@@ -288,6 +282,7 @@ function submitPassword(attempt) {
 
     if (checkAdminPassword(attempt)) {
         switchUser("admin");
+        location.href = "https://everything-clicker.vercel.app/x.html";
     } else {
         print("su: Authentication failure");
         updatePrompt();
