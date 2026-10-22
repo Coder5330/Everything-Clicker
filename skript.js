@@ -38,7 +38,7 @@ const suffix = [
 
 let intensity = 40;
 let growing = true;
-let count = 0;
+let count = 1e19;
 let inc = 1;
 let autoadd = 0;
 let data = [];
